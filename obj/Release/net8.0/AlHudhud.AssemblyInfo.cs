@@ -12,7 +12,7 @@ using System;
 using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("AlHudhud")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff858bcc805a93b565b08dfe9a5231b776d82b85")]
 [assembly: System.Reflection.AssemblyProductAttribute("AlHudhud")]

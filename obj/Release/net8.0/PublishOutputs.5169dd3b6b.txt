@@ -1,0 +1,11 @@
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\AlHudhud.exe
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\appsettings.Development.json
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\appsettings.json
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\AlHudhud.dll
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\AlHudhud.deps.json
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\AlHudhud.runtimeconfig.json
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\AlHudhud.pdb
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\Microsoft.OpenApi.dll
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\abdurahman\source\repos\AlHudhud\AlHudhud\obj\Release\net8.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
