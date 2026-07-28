@@ -1,4 +1,4 @@
-﻿namespace BestPriceStore.DTOs
+namespace BestPriceStore.DTOs
 {
     // Standardized API response structure.
     // T represents then Type of the response data

@@ -91,18 +91,21 @@ public class ScopesOfWorkService : IScopesOfWorkService
         return new ApiResponse<ScopeOfWorkResponseDTO>(200, scopeResponse);
     }
 
-    public async Task<ApiResponse<string>> DeleteScopeAsync(int id)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteScopeAsync(int id)
     {
         var scope = await _context.ScopesOfWork.FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
         if (scope == null)
         {
-            return new ApiResponse<string>(404, "Scope of work not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Scope of work not found.");
         }
 
         // Soft Delete
         scope.IsDeleted = true;
         await _context.SaveChangesAsync();
 
-        return new ApiResponse<string>(200, "Scope of work deleted successfully.");
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = "Scope of work deleted successfully."
+        });
     }
 }
