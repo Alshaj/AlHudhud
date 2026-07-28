@@ -21,7 +21,7 @@ Since the API uses HttpOnly cookies, the browser will automatically include the 
 - **`userName`** (string, Required): The unique login name.
 - **`email`** (string, Required): The unique user email address.
 - **`phoneNumber`** (string, Optional): The contact number.
-- **`roleId`** (int, Required): The ID of the role to assign (`1` for Admin, `2` for Inspector, `3` for Viewer).
+- **`roleId`** (int, Required): The ID of the role to assign. The list of roles and their IDs should be retrieved dynamically from the [Get Roles](file:///c:/Users/abdurahman/source/repos/AlHudhud/AlHudhud/api%20documentation/rolesController/get_roles.md) endpoint.
 
 ```json
 {
