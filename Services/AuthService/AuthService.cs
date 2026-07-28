@@ -220,6 +220,40 @@ public class AuthService : IAuthService
         return new ApiResponse<string>(200, "Password has been reset successfully.");
     }
 
+    public async Task<ApiResponse<string>> ResendOtpAsync(ResendOtpRequestDTO resendOtpDTO)
+    {
+        var user = await _userManager.FindByEmailAsync(resendOtpDTO.Email);
+        if (user == null)
+        {
+            return new ApiResponse<string>(200, "If the email is registered, a new OTP has been sent.");
+        }
+
+        var otp = new Random().Next(100000, 999999).ToString();
+        user.PasswordResetOtp = otp;
+        user.PasswordResetOtpExpiryTime = DateTime.UtcNow.AddMinutes(5);
+
+        await _userManager.UpdateAsync(user);
+
+        var emailSubject = "Al Hudhud System - Resend Password Reset OTP";
+        var emailBody = $@"
+            <h3>New Reset Password Request</h3>
+            <p>You requested a new OTP. Please use the following 6-digit OTP to reset your password:</p>
+            <h2 style='color: #007bff; letter-spacing: 2px;'>{otp}</h2>
+            <p>This code is valid for <strong>5 minutes</strong>. If you did not request this, please ignore this email.</p>
+        ";
+
+        try
+        {
+            await _emailService.SendEmailAsync(user.Email!, emailSubject, emailBody);
+        }
+        catch (Exception)
+        {
+            return new ApiResponse<string>(500, "Failed to send reset email. Please try again later.");
+        }
+
+        return new ApiResponse<string>(200, "If the email is registered, a new OTP has been sent.");
+    }
+
     private string GenerateJwtToken(ApplicationUser user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]!));

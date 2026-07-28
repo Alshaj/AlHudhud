@@ -101,4 +101,20 @@ public class AuthController : ControllerBase
         }
         return Ok(response);
     }
+
+    [EnableRateLimiting("AuthLimiter")]
+    [HttpPost("resend-otp")]
+    public async Task<ActionResult<ApiResponse<string>>> ResendOtp([FromBody] ResendOtpRequestDTO resendOtpDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Invalid resend OTP request.");
+        }
+        var response = await _authService.ResendOtpAsync(resendOtpDTO);
+        if (response.StatusCode != 200)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
+    }
 }
