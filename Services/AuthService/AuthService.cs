@@ -127,7 +127,7 @@ public class AuthService : IAuthService
                 Secure = true,
                 SameSite = SameSiteMode.None,
                 Path = "/",
-                Domain = ".masarak.app"
+                //Domain = ".masarak.app"
             };
 
             httpContext.Response.Cookies.Delete("access_token", cookieOptions);
@@ -270,9 +270,9 @@ public class AuthService : IAuthService
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTime.UtcNow.AddMinutes(15),
+            Expires = DateTime.UtcNow.AddMinutes(1),
             Path = "/",
-            Domain = ".masarak.app"
+            //Domain = ".masarak.app"
         };
 
         var refreshCookieOptions = new CookieOptions
@@ -280,9 +280,9 @@ public class AuthService : IAuthService
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTime.UtcNow.AddDays(1),
+            Expires = DateTime.UtcNow.AddMinutes(3),
             Path = "/",
-            Domain = ".masarak.app"
+            //Domain = ".masarak.app"
         };
 
         httpContext.Response.Cookies.Append("access_token", accessToken, accessCookieOptions);
@@ -299,9 +299,9 @@ public class AuthService : IAuthService
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTime.UtcNow.AddMinutes(15),
+            Expires = DateTime.UtcNow.AddMinutes(1),
             Path = "/",
-            Domain = ".masarak.app"
+            //Domain = ".masarak.app"
         };
 
         httpContext.Response.Cookies.Append("access_token", accessToken, accessCookieOptions);
