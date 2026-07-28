@@ -21,14 +21,23 @@ public class ClientsController : ControllerBase
     public async Task<ActionResult<ApiResponse<IEnumerable<ClientResponseDTO>>>> GetAllClients()
     {
         var response = await _clientsService.GetAllClientsAsync();
-        return StatusCode(response.StatusCode, response);
+        if (response.StatusCode != 200)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<ClientResponseDTO>>> GetClientDetails(int id)
     {
         var response = await _clientsService.GetClientByIdAsync(id);
-        return StatusCode(response.StatusCode, response);
+        if (response.StatusCode != 200)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
+        
     }
 
     [HttpPost]
@@ -40,7 +49,12 @@ public class ClientsController : ControllerBase
             return BadRequest(new ApiResponse<ClientResponseDTO>(400, "Invalid client data."));
         }
         var response = await _clientsService.CreateClientAsync(createClientDTO);
-        return StatusCode(response.StatusCode, response);
+        if (response.StatusCode != 201)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
+        
     }
 
     [HttpPut("{id}")]
@@ -52,7 +66,11 @@ public class ClientsController : ControllerBase
             return BadRequest(new ApiResponse<ClientResponseDTO>(400, "Invalid client data."));
         }
         var response = await _clientsService.UpdateClientAsync(id, updateClientDTO);
-        return StatusCode(response.StatusCode, response);
+        if (response.StatusCode != 200)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]
@@ -60,6 +78,10 @@ public class ClientsController : ControllerBase
     public async Task<ActionResult<ApiResponse<string>>> DeleteClient(int id)
     {
         var response = await _clientsService.DeleteClientAsync(id);
-        return StatusCode(response.StatusCode, response);
+        if (response.StatusCode != 200)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
     }
 }
