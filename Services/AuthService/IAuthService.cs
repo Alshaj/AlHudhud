@@ -10,4 +10,5 @@ public interface IAuthService
     Task<ApiResponse<string>> ChangePasswordAsync(ChangePasswordRequestDTO changePasswordDTO);
     Task<ApiResponse<string>> ForgotPasswordAsync(ForgotPasswordRequestDTO forgotPasswordDTO);
     Task<ApiResponse<string>> ResetPasswordAsync(ResetPasswordRequestDTO resetPasswordDTO);
+    Task<ApiResponse<string>> ResendOtpAsync(ResendOtpRequestDTO resendOtpDTO);
 }
