@@ -37,7 +37,6 @@ public class ClientsController : ControllerBase
             return StatusCode(response.StatusCode, response);
         }
         return Ok(response);
-        
     }
 
     [HttpPost]
@@ -53,8 +52,7 @@ public class ClientsController : ControllerBase
         {
             return StatusCode(response.StatusCode, response);
         }
-        return Ok(response);
-        
+        return StatusCode(201, response);
     }
 
     [HttpPut("{id}")]
