@@ -4,6 +4,7 @@ using AlHudhud.Services.AuthService;
 using AlHudhud.Services.EmailService;
 using AlHudhud.Services.ClientsService;
 using AlHudhud.Services.ScopesOfWorkService;
+using AlHudhud.Services.UsersService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,9 @@ builder.Services.AddScoped<IClientsService, ClientsService>();
 
 // Scope of Work Service
 builder.Services.AddScoped<IScopesOfWorkService, ScopesOfWorkService>();
+
+// Users Service
+builder.Services.AddScoped<IUsersService, UsersService>();
 
 // JWT Authentication Configuration
 builder.Services.AddAuthentication(options =>

@@ -293,7 +293,7 @@ public class AuthService : IAuthService
             issuer: _configuration["JWT:Issuer"],
             audience: _configuration["JWT:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(1),
+            expires: DateTime.UtcNow.AddMinutes(15),
             signingCredentials: creds
         );
 
@@ -308,7 +308,7 @@ public class AuthService : IAuthService
         var refreshToken = Convert.ToBase64String(randomNumber);
 
         user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(3);
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
 
         await _userManager.UpdateAsync(user);
 
@@ -325,7 +325,7 @@ public class AuthService : IAuthService
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTime.UtcNow.AddMinutes(1),
+            Expires = DateTime.UtcNow.AddMinutes(15),
             Path = "/",
             //Domain = ".masarak.app"
         };
@@ -335,7 +335,7 @@ public class AuthService : IAuthService
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTime.UtcNow.AddMinutes(3),
+            Expires = DateTime.UtcNow.AddDays(1),
             Path = "/",
             //Domain = ".masarak.app"
         };
@@ -354,7 +354,7 @@ public class AuthService : IAuthService
             HttpOnly = true,
             Secure = true,
             SameSite = SameSiteMode.None,
-            Expires = DateTime.UtcNow.AddMinutes(1),
+            Expires = DateTime.UtcNow.AddMinutes(15),
             Path = "/",
             //Domain = ".masarak.app"
         };
