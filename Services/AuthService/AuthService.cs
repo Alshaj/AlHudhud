@@ -104,7 +104,7 @@ public class AuthService : IAuthService
         return new ApiResponse<LoginResponseDTO>(200, loginResponse);
     }
 
-    public async Task<ApiResponse<string>> LogoutAsync()
+    public async Task<ApiResponse<ConfirmationResponseDTO>> LogoutAsync()
     {
         var httpContext = _httpContextAccessor.HttpContext;
         if (httpContext != null)
@@ -134,33 +134,42 @@ public class AuthService : IAuthService
             httpContext.Response.Cookies.Delete("refresh_token", cookieOptions);
         }
 
-        return new ApiResponse<string>(200, "Logged out successfully.");
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = "Logged out successfully."
+        });
     }
 
-    public async Task<ApiResponse<string>> ChangePasswordAsync(ChangePasswordRequestDTO changePasswordDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> ChangePasswordAsync(ChangePasswordRequestDTO changePasswordDTO)
     {
         var user = await _userManager.FindByEmailAsync(changePasswordDTO.Email);
         if (user == null)
         {
-            return new ApiResponse<string>(404, "User not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "User not found.");
         }
 
         var result = await _userManager.ChangePasswordAsync(user, changePasswordDTO.OldPassword, changePasswordDTO.NewPassword);
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
-            return new ApiResponse<string>(400, errors);
+            return new ApiResponse<ConfirmationResponseDTO>(400, errors);
         }
 
-        return new ApiResponse<string>(200, "Password changed successfully.");
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = "Password changed successfully."
+        });
     }
 
-    public async Task<ApiResponse<string>> ForgotPasswordAsync(ForgotPasswordRequestDTO forgotPasswordDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> ForgotPasswordAsync(ForgotPasswordRequestDTO forgotPasswordDTO)
     {
         var user = await _userManager.FindByEmailAsync(forgotPasswordDTO.Email);
         if (user == null)
         {
-            return new ApiResponse<string>(200, "If the email is registered, we have sent a 6-digit OTP.");
+            return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+            {
+                Message = "If the email is registered, we have sent a 6-digit OTP."
+            });
         }
 
         var otp = new Random().Next(100000, 999999).ToString();
@@ -183,25 +192,28 @@ public class AuthService : IAuthService
         }
         catch (Exception)
         {
-            return new ApiResponse<string>(500, "Failed to send reset email. Please try again later.");
+            return new ApiResponse<ConfirmationResponseDTO>(500, "Failed to send reset email. Please try again later.");
         }
 
-        return new ApiResponse<string>(200, "If the email is registered, we have sent a 6-digit OTP.");
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = "If the email is registered, we have sent a 6-digit OTP."
+        });
     }
 
-    public async Task<ApiResponse<string>> ResetPasswordAsync(ResetPasswordRequestDTO resetPasswordDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> ResetPasswordAsync(ResetPasswordRequestDTO resetPasswordDTO)
     {
         var user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
         if (user == null)
         {
-            return new ApiResponse<string>(404, "User not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "User not found.");
         }
 
         if (string.IsNullOrEmpty(user.PasswordResetOtp) || 
             user.PasswordResetOtp != resetPasswordDTO.Otp || 
             user.PasswordResetOtpExpiryTime <= DateTime.UtcNow)
         {
-            return new ApiResponse<string>(400, "Invalid or expired OTP.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, "Invalid or expired OTP.");
         }
 
         var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -210,22 +222,28 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
-            return new ApiResponse<string>(400, errors);
+            return new ApiResponse<ConfirmationResponseDTO>(400, errors);
         }
 
         user.PasswordResetOtp = null;
         user.PasswordResetOtpExpiryTime = null;
         await _userManager.UpdateAsync(user);
 
-        return new ApiResponse<string>(200, "Password has been reset successfully.");
+        return new ApiResponse<ConfirmationResponseDTO>(200,new ConfirmationResponseDTO
+        {
+            Message = "Password has been reset successfully."
+        });
     }
 
-    public async Task<ApiResponse<string>> ResendOtpAsync(ResendOtpRequestDTO resendOtpDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> ResendOtpAsync(ResendOtpRequestDTO resendOtpDTO)
     {
         var user = await _userManager.FindByEmailAsync(resendOtpDTO.Email);
         if (user == null)
         {
-            return new ApiResponse<string>(200, "If the email is registered, a new OTP has been sent.");
+            return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+            {
+                Message = "If the email is registered, a new OTP has been sent."
+            });
         }
 
         var otp = new Random().Next(100000, 999999).ToString();
@@ -248,10 +266,13 @@ public class AuthService : IAuthService
         }
         catch (Exception)
         {
-            return new ApiResponse<string>(500, "Failed to send reset email. Please try again later.");
+            return new ApiResponse<ConfirmationResponseDTO>(500, "Failed to send reset email. Please try again later.");
         }
 
-        return new ApiResponse<string>(200, "If the email is registered, a new OTP has been sent.");
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = "If the email is registered, a new OTP has been sent."
+        });
     }
 
     private string GenerateJwtToken(ApplicationUser user)

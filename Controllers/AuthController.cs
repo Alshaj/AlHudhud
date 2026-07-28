@@ -58,7 +58,7 @@ public class AuthController : ControllerBase
 
     [HttpPost("change-password")]
     [Authorize]
-    public async Task<ActionResult<ApiResponse<string>>> ChangePassword([FromBody] ChangePasswordRequestDTO changePasswordDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> ChangePassword([FromBody] ChangePasswordRequestDTO changePasswordDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -73,7 +73,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("forgot-password")]
-    public async Task<ActionResult<ApiResponse<string>>> ForgotPassword([FromBody] ForgotPasswordRequestDTO forgotPasswordDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> ForgotPassword([FromBody] ForgotPasswordRequestDTO forgotPasswordDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -88,7 +88,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("reset-password")]
-    public async Task<ActionResult<ApiResponse<string>>> ResetPassword([FromBody] ResetPasswordRequestDTO resetPasswordDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> ResetPassword([FromBody] ResetPasswordRequestDTO resetPasswordDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -104,7 +104,7 @@ public class AuthController : ControllerBase
 
     [EnableRateLimiting("AuthLimiter")]
     [HttpPost("resend-otp")]
-    public async Task<ActionResult<ApiResponse<string>>> ResendOtp([FromBody] ResendOtpRequestDTO resendOtpDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> ResendOtp([FromBody] ResendOtpRequestDTO resendOtpDTO)
     {
         if (!ModelState.IsValid)
         {

@@ -73,7 +73,7 @@ public class ScopeOfWorkController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<string>>> DeleteScope(int id)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteScope(int id)
     {
         var response = await _scopesService.DeleteScopeAsync(id);
         if (response.StatusCode != 200)

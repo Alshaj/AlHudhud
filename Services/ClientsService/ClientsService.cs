@@ -102,7 +102,7 @@ public class ClientsService : IClientsService
         return new ApiResponse<ClientResponseDTO>(200, clientResponse);
     }
 
-    public async Task<ApiResponse<string>> DeleteClientAsync(int id)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteClientAsync(int id)
     {
         var client = await _context.Clients
             .Include(c => c.Projects)
@@ -110,17 +110,20 @@ public class ClientsService : IClientsService
             
         if (client == null)
         {
-            return new ApiResponse<string>(404, "Client not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Client not found.");
         }
 
         if (client.Projects.Any())
         {
-            return new ApiResponse<string>(400, "Cannot delete client because they have associated projects.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, "Cannot delete client because they have associated projects.");
         }
 
         _context.Clients.Remove(client);
         await _context.SaveChangesAsync();
 
-        return new ApiResponse<string>(200, "Client deleted successfully.");
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = "Client deleted successfully."
+        });
     }
 }

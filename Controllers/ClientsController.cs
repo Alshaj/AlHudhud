@@ -73,7 +73,7 @@ public class ClientsController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<string>>> DeleteClient(int id)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteClient(int id)
     {
         var response = await _clientsService.DeleteClientAsync(id);
         if (response.StatusCode != 200)

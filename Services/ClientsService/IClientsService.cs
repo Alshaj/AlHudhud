@@ -8,5 +8,5 @@ public interface IClientsService
     Task<ApiResponse<ClientResponseDTO>> GetClientByIdAsync(int id);
     Task<ApiResponse<ClientResponseDTO>> CreateClientAsync(CreateClientRequestDTO createClientDTO);
     Task<ApiResponse<ClientResponseDTO>> UpdateClientAsync(int id, UpdateClientRequestDTO updateClientDTO);
-    Task<ApiResponse<string>> DeleteClientAsync(int id);
+    Task<ApiResponse<ConfirmationResponseDTO>> DeleteClientAsync(int id);
 }
