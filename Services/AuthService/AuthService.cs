@@ -238,7 +238,7 @@ public class AuthService : IAuthService
             issuer: _configuration["JWT:Issuer"],
             audience: _configuration["JWT:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(15),
+            expires: DateTime.UtcNow.AddMinutes(1),
             signingCredentials: creds
         );
 
@@ -253,7 +253,7 @@ public class AuthService : IAuthService
         var refreshToken = Convert.ToBase64String(randomNumber);
 
         user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(3);
 
         await _userManager.UpdateAsync(user);
 
