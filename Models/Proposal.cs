@@ -22,6 +22,11 @@ public class Proposal
     [Column(TypeName = "decimal(18, 2)")]
     public decimal? PendingAmount { get; set; }
 
+    [Column(TypeName = "decimal(18, 2)")]
+    public decimal TotalAmount { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
     public int VersionNumber { get; set; }
     public string Notes { get; set; } = string.Empty;
 

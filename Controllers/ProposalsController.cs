@@ -1,4 +1,5 @@
 using AlHudhud.Services.ProposalsService;
+using AlHudhud.DTOs.Proposals;
 using BestPriceStore.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace AlHudhud.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin,Viewer")]
+//[Authorize(Roles = "Admin,Viewer")]
 public class ProposalsController : ControllerBase
 {
     private readonly IProposalsService _proposalsService;
@@ -18,20 +19,9 @@ public class ProposalsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<ProposalResponseDTO>>>> GetProposals()
+    public async Task<ActionResult<ApiResponse<List<ProposalResponseDTO>>>> GetAllProposals()
     {
         var response = await _proposalsService.GetAllProposalsAsync();
-        if (response.StatusCode != 200)
-        {
-            return StatusCode(response.StatusCode, response);
-        }
-        return Ok(response);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ApiResponse<ProposalDetailsWithHistoryResponseDTO>>> GetProposalDetails(int id)
-    {
-        var response = await _proposalsService.GetProposalByIdAsync(id);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);
@@ -47,6 +37,7 @@ public class ProposalsController : ControllerBase
         {
             return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid proposal data."));
         }
+
         var response = await _proposalsService.CreateProposalAsync(createProposalDTO);
         if (response.StatusCode != 201)
         {
@@ -63,47 +54,8 @@ public class ProposalsController : ControllerBase
         {
             return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid proposal data."));
         }
+
         var response = await _proposalsService.UpdateProposalAsync(id, updateProposalDTO);
-        if (response.StatusCode != 200)
-        {
-            return StatusCode(response.StatusCode, response);
-        }
-        return Ok(response);
-    }
-
-    [HttpPost("{id}/version")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> CreateProposalVersion(int id, [FromBody] CreateProposalVersionRequestDTO versionDTO)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid version data."));
-        }
-        var response = await _proposalsService.CreateProposalVersionAsync(id, versionDTO);
-        if (response.StatusCode != 201)
-        {
-            return StatusCode(response.StatusCode, response);
-        }
-        return Ok(response);
-    }
-
-    [HttpPatch("{id}/approve")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> ApproveProposal(int id)
-    {
-        var response = await _proposalsService.ApproveProposalAsync(id);
-        if (response.StatusCode != 200)
-        {
-            return StatusCode(response.StatusCode, response);
-        }
-        return Ok(response);
-    }
-
-    [HttpPatch("{id}/reject")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> RejectProposal(int id)
-    {
-        var response = await _proposalsService.RejectProposalAsync(id);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);

@@ -48,6 +48,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .HasForeignKey(p => p.StatusId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Entity<Proposal>()
+            .Property(p => p.CreatedAt)
+            .HasDefaultValueSql("GETUTCDATE()");
+
+        builder.Entity<Proposal>()
+            .Property(p => p.TotalAmount)
+            .HasDefaultValue(0m);
+
         // Define relations with Inspector in Inspections
         builder.Entity<Inspection>()
             .HasOne(i => i.Inspector)
