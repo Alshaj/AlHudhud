@@ -31,6 +31,7 @@ None.
       "proposalNumber": "AH-260001",
       "clientName": "Al Hudhud Consultancy LLC",
       "projectName": "Warehouse Inspection",
+      "scopeOfWork": "Fire Alarm Inspection",
       "referedBy": "admin@example.com",
       "price": 10000.00,
       "vat": 500.00,

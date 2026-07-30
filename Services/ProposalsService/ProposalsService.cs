@@ -3,6 +3,7 @@ using AlHudhud.Models;
 using AlHudhud.DTOs.Proposals;
 using BestPriceStore.DTOs;
 using Microsoft.EntityFrameworkCore;
+using AlHudhud.Enums;
 
 namespace AlHudhud.Services.ProposalsService;
 
@@ -21,6 +22,8 @@ public class ProposalsService : IProposalsService
             .Include(p => p.ProjectScope)
                 .ThenInclude(ps => ps!.Project)
                     .ThenInclude(proj => proj!.Client)
+            .Include(p => p.ProjectScope)
+                .ThenInclude(ps => ps!.ScopeOfWork)
             .Include(p => p.ProposalStatus)
             .Include(p => p.ReferedByUser)
             .OrderByDescending(p => p.CreatedAt)
@@ -33,6 +36,9 @@ public class ProposalsService : IProposalsService
                     : string.Empty,
                 ProjectName = p.ProjectScope != null && p.ProjectScope.Project != null
                     ? p.ProjectScope.Project.Name
+                    : string.Empty,
+                ScopeOfWork = p.ProjectScope != null && p.ProjectScope.ScopeOfWork != null
+                    ? p.ProjectScope.ScopeOfWork.Name
                     : string.Empty,
                 ReferedBy = p.ReferedByUser != null
                     ? p.ReferedByUser.UserName ?? string.Empty
@@ -134,7 +140,7 @@ public class ProposalsService : IProposalsService
             {
                 ProposalNumber = proposalNumber,
                 ProjectScopeId = projectScope.Id,
-                StatusId = 1, // Pending
+                StatusId = (int)ProposalStatusEnum.Pending,
                 ReferedBy = request.ReferedById,
                 Price = request.Price,
                 Vat = vat,
@@ -260,5 +266,45 @@ public class ProposalsService : IProposalsService
             await transaction.RollbackAsync();
             return new ApiResponse<ConfirmationResponseDTO>(500, $"An error occurred: {ex.Message}");
         }
+    }
+
+    public async Task<ApiResponse<ConfirmationResponseDTO>> ChangeProposalStatusAsync(int id, ChangeProposalStatusDTO request)
+    {
+        // 1. Retrieve the existing proposal
+        var existingProposal = await _context.Proposals.FindAsync(id);
+        if (existingProposal == null)
+        {
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Proposal not found.");
+        }
+
+        
+        // 2. If status is Approved (ID 2), check if another proposal for the same ProjectScope is already approved
+        if (request.StatusId == (int)ProposalStatusEnum.Approved)
+        {
+            var otherApprovedExists = await _context.Proposals
+                .AnyAsync(p => p.ProjectScopeId == existingProposal.ProjectScopeId && p.StatusId == (int)ProposalStatusEnum.Approved && p.Id != id);
+
+            if (otherApprovedExists)
+            {
+                return new ApiResponse<ConfirmationResponseDTO>(400, "Cannot approve this proposal because another proposal is already approved for this project scope.");
+            }
+        }
+
+        // 3. Update status directly on the proposal row
+        existingProposal.StatusId = request.StatusId;
+        await _context.SaveChangesAsync();
+
+        string statusName = request.StatusId switch
+        {
+            (int)ProposalStatusEnum.Pending => "Pending",
+            (int)ProposalStatusEnum.Approved => "Approved",
+            (int)ProposalStatusEnum.Rejected => "Rejected",
+            _ => "Unknown"
+        };
+
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = $"Proposal status updated to {statusName} successfully."
+        });
     }
 }
