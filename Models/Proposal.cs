@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace AlHudhud.Models;
 
 public class Proposal
@@ -7,8 +9,19 @@ public class Proposal
     public int ProjectScopeId { get; set; }
     public int StatusId { get; set; }
     public int ReferedBy { get; set; }
+
+    [Column(TypeName = "decimal(18, 2)")]
     public decimal Price { get; set; }
+
+    [Column(TypeName = "decimal(18, 2)")]
     public decimal Vat { get; set; }
+
+    [Column(TypeName = "decimal(18, 2)")]
+    public decimal ReceivedFromClient { get; set; }
+
+    [Column(TypeName = "decimal(18, 2)")]
+    public decimal PendingAmount { get; set; }
+
     public int VersionNumber { get; set; }
     public string Notes { get; set; } = string.Empty;
 
