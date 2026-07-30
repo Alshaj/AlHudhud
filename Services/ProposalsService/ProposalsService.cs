@@ -14,7 +14,7 @@ public class ProposalsService : IProposalsService
         _context = context;
     }
 
-    public async Task<ApiResponse<IEnumerable<ProposalResponseDTO>>> GetAllProposalsAsync()
+    public async Task<ApiResponse<List<ProposalResponseDTO>>> GetAllProposalsAsync()
     {
         // Return latest version of each proposal number
         var proposalsList = await _context.Proposals
@@ -50,7 +50,7 @@ public class ProposalsService : IProposalsService
             })
             .ToList();
 
-        return new ApiResponse<IEnumerable<ProposalResponseDTO>>(200, proposals);
+        return new ApiResponse<List<ProposalResponseDTO>>(200, proposals);
     }
 
     public async Task<ApiResponse<ProposalDetailsWithHistoryResponseDTO>> GetProposalByIdAsync(int id)
@@ -128,20 +128,23 @@ public class ProposalsService : IProposalsService
         return new ApiResponse<ProposalDetailsWithHistoryResponseDTO>(200, result);
     }
 
-    public async Task<ApiResponse<ProposalResponseDTO>> CreateProposalAsync(CreateProposalRequestDTO createProposalDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> CreateProposalAsync(CreateProposalRequestDTO createProposalDTO)
     {
         // 1. Verify Client exists
         var clientExists = await _context.Clients.AnyAsync(c => c.Id == createProposalDTO.ClientId);
         if (!clientExists)
         {
-            return new ApiResponse<ProposalResponseDTO>(400, "Invalid ClientId.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, "Invalid ClientId.");
         }
 
         // 2. Verify Scope of Work exists
         var scopeOfWorkExists = await _context.ScopesOfWork.AnyAsync(s => s.Id == createProposalDTO.ScopeOfWorkId);
         if (!scopeOfWorkExists)
         {
-            return new ApiResponse<ProposalResponseDTO>(400, "Invalid ScopeOfWorkId.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, new ConfirmationResponseDTO
+            {
+                Message = "Invalid Scope Of Work Id."
+            });
         }
 
         // 3. Validate Inspector user role
@@ -149,7 +152,10 @@ public class ProposalsService : IProposalsService
             .AnyAsync(ur => ur.UserId == createProposalDTO.ReferedBy && ur.RoleId == 2);
         if (!isInspector)
         {
-            return new ApiResponse<ProposalResponseDTO>(400, "Referred user must exist and have the Inspector role.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, new ConfirmationResponseDTO
+            {
+                Message = "Referred user must exist and have the Inspector role."
+            });
         }
 
         // 4. Resolve or Create Project
@@ -222,15 +228,18 @@ public class ProposalsService : IProposalsService
         await _context.SaveChangesAsync();
 
         var detailsResponse = await GetProposalByIdAsync(proposal.Id);
-        return new ApiResponse<ProposalResponseDTO>(201, detailsResponse.Data!.Details);
+        return new ApiResponse<ConfirmationResponseDTO>(201, new ConfirmationResponseDTO
+        {
+            Message = $"Proposal created successfully with Proposal Number: {proposalNumber}"
+        });
     }
 
-    public async Task<ApiResponse<ProposalResponseDTO>> UpdateProposalAsync(int id, UpdateProposalRequestDTO updateProposalDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> UpdateProposalAsync(int id, UpdateProposalRequestDTO updateProposalDTO)
     {
         var existing = await _context.Proposals.FindAsync(id);
         if (existing == null)
         {
-            return new ApiResponse<ProposalResponseDTO>(404, "Proposal not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Proposal not found.");
         }
 
         // Validate Referred By user exists and is an Inspector
@@ -238,7 +247,10 @@ public class ProposalsService : IProposalsService
             .AnyAsync(ur => ur.UserId == updateProposalDTO.ReferedBy && ur.RoleId == 2);
         if (!isInspector)
         {
-            return new ApiResponse<ProposalResponseDTO>(400, "Referred user must exist and have the Inspector role.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, new ConfirmationResponseDTO
+            {
+                Message = "Referred user must exist and have the Inspector role."
+            });
         }
 
         var vat = updateProposalDTO.Price * 0.05m;
@@ -255,15 +267,18 @@ public class ProposalsService : IProposalsService
         await _context.SaveChangesAsync();
 
         var detailsResponse = await GetProposalByIdAsync(existing.Id);
-        return new ApiResponse<ProposalResponseDTO>(200, detailsResponse.Data!.Details);
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = $"Proposal updated successfully."
+        });
     }
 
-    public async Task<ApiResponse<ProposalResponseDTO>> CreateProposalVersionAsync(int id, CreateProposalVersionRequestDTO versionDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> CreateProposalVersionAsync(int id, CreateProposalVersionRequestDTO versionDTO)
     {
         var existing = await _context.Proposals.FindAsync(id);
         if (existing == null)
         {
-            return new ApiResponse<ProposalResponseDTO>(404, "Base proposal not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Base proposal not found.");
         }
 
         // Validate Referred By user exists and is an Inspector
@@ -271,7 +286,7 @@ public class ProposalsService : IProposalsService
             .AnyAsync(ur => ur.UserId == versionDTO.ReferedBy && ur.RoleId == 2);
         if (!isInspector)
         {
-            return new ApiResponse<ProposalResponseDTO>(400, "Referred user must exist and have the Inspector role.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, "Referred user must exist and have the Inspector role.");
         }
 
         // Get max version number for this Proposal Number
@@ -301,15 +316,18 @@ public class ProposalsService : IProposalsService
         await _context.SaveChangesAsync();
 
         var detailsResponse = await GetProposalByIdAsync(newVersion.Id);
-        return new ApiResponse<ProposalResponseDTO>(201, detailsResponse.Data!.Details);
+        return new ApiResponse<ConfirmationResponseDTO>(201, new ConfirmationResponseDTO
+        {
+            Message = $"Proposal version {newVersion.VersionNumber} created successfully."
+        });
     }
 
-    public async Task<ApiResponse<ProposalResponseDTO>> ApproveProposalAsync(int id)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> ApproveProposalAsync(int id)
     {
         var proposal = await _context.Proposals.FindAsync(id);
         if (proposal == null)
         {
-            return new ApiResponse<ProposalResponseDTO>(404, "Proposal not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Proposal not found.");
         }
 
         // Rule: Only one approved proposal can exist per ProjectScope
@@ -326,21 +344,27 @@ public class ProposalsService : IProposalsService
         await _context.SaveChangesAsync();
 
         var detailsResponse = await GetProposalByIdAsync(proposal.Id);
-        return new ApiResponse<ProposalResponseDTO>(200, detailsResponse.Data!.Details);
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = $"Proposal {proposal.ProposalNumber} version {proposal.VersionNumber} approved successfully."
+        });
     }
 
-    public async Task<ApiResponse<ProposalResponseDTO>> RejectProposalAsync(int id)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> RejectProposalAsync(int id)
     {
         var proposal = await _context.Proposals.FindAsync(id);
         if (proposal == null)
         {
-            return new ApiResponse<ProposalResponseDTO>(404, "Proposal not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Proposal not found.");
         }
 
         proposal.StatusId = 3; // Rejected
         await _context.SaveChangesAsync();
 
         var detailsResponse = await GetProposalByIdAsync(proposal.Id);
-        return new ApiResponse<ProposalResponseDTO>(200, detailsResponse.Data!.Details);
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = $"Proposal {proposal.ProposalNumber} version {proposal.VersionNumber} rejected successfully."
+        });
     }
 }

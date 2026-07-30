@@ -14,7 +14,7 @@ public class RolesService : IRolesService
         _roleManager = roleManager;
     }
 
-    public async Task<ApiResponse<IEnumerable<RoleResponseDTO>>> GetAllRolesAsync()
+    public async Task<ApiResponse<List<RoleResponseDTO>>> GetAllRolesAsync()
     {
         var roles = await _roleManager.Roles
             .Select(r => new RoleResponseDTO
@@ -24,6 +24,11 @@ public class RolesService : IRolesService
             })
             .ToListAsync();
 
-        return new ApiResponse<IEnumerable<RoleResponseDTO>>(200, roles);
+        if (roles == null)
+        {
+            return new ApiResponse<List<RoleResponseDTO>>(404, "No Roles Found");
+        }
+
+        return new ApiResponse<List<RoleResponseDTO>>(200, roles);
     }
 }

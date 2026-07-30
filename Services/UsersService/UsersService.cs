@@ -16,7 +16,7 @@ public class UsersService : IUsersService
         _roleManager = roleManager;
     }
 
-    public async Task<ApiResponse<IEnumerable<UserResponseDTO>>> GetAllUsersAsync()
+    public async Task<ApiResponse<List<UserResponseDTO>>> GetAllUsersAsync()
     {
         var usersList = await _userManager.Users.ToListAsync();
         var usersResponse = new List<UserResponseDTO>();
@@ -40,7 +40,7 @@ public class UsersService : IUsersService
             });
         }
 
-        return new ApiResponse<IEnumerable<UserResponseDTO>>(200, usersResponse);
+        return new ApiResponse<List<UserResponseDTO>>(200, usersResponse);
     }
 
     public async Task<ApiResponse<UserResponseDTO>> GetUserByIdAsync(int id)
@@ -70,12 +70,12 @@ public class UsersService : IUsersService
         return new ApiResponse<UserResponseDTO>(200, userDTO);
     }
 
-    public async Task<ApiResponse<UserResponseDTO>> CreateUserAsync(CreateUserRequestDTO createUserDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> CreateUserAsync(CreateUserRequestDTO createUserDTO)
     {
         var role = await _roleManager.Roles.FirstOrDefaultAsync(r => r.Id == createUserDTO.RoleId);
         if (role == null)
         {
-            return new ApiResponse<UserResponseDTO>(400, "Invalid Role ID.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, "Invalid Role ID.");
         }
 
         var user = new ApplicationUser
@@ -90,37 +90,30 @@ public class UsersService : IUsersService
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
-            return new ApiResponse<UserResponseDTO>(400, errors);
+            return new ApiResponse<ConfirmationResponseDTO>(400, errors);
         }
 
         await _userManager.AddToRoleAsync(user, role.Name!);
 
-        var userResponse = new UserResponseDTO
-        {
-            Id = user.Id,
-            UserName = user.UserName,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            IsActive = user.Is_Active,
-            Role = role.Name!,
-            RoleId = role.Id
-        };
 
-        return new ApiResponse<UserResponseDTO>(201, userResponse);
+        return new ApiResponse<ConfirmationResponseDTO>(201, new ConfirmationResponseDTO
+        {
+            Message = "User created successfully."
+        });
     }
 
-    public async Task<ApiResponse<UserResponseDTO>> UpdateUserAsync(int id, UpdateUserRequestDTO updateUserDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> UpdateUserAsync(int id, UpdateUserRequestDTO updateUserDTO)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null)
         {
-            return new ApiResponse<UserResponseDTO>(404, "User not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "User not found.");
         }
 
         var role = await _roleManager.Roles.FirstOrDefaultAsync(r => r.Id == updateUserDTO.RoleId);
         if (role == null)
         {
-            return new ApiResponse<UserResponseDTO>(400, "Invalid Role ID.");
+            return new ApiResponse<ConfirmationResponseDTO>(400, "Invalid Role ID.");
         }
 
         user.UserName = updateUserDTO.UserName;
@@ -131,7 +124,7 @@ public class UsersService : IUsersService
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
-            return new ApiResponse<UserResponseDTO>(400, errors);
+            return new ApiResponse<ConfirmationResponseDTO>(400, errors);
         }
 
         var currentRoles = await _userManager.GetRolesAsync(user);
@@ -141,26 +134,18 @@ public class UsersService : IUsersService
             await _userManager.AddToRoleAsync(user, role.Name!);
         }
 
-        var userResponse = new UserResponseDTO
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
         {
-            Id = user.Id,
-            UserName = user.UserName,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            IsActive = user.Is_Active,
-            Role = role.Name!,
-            RoleId = role.Id
-        };
-
-        return new ApiResponse<UserResponseDTO>(200, userResponse);
+            Message = "User updated successfully."
+        });
     }
 
-    public async Task<ApiResponse<UserResponseDTO>> ToggleUserStatusAsync(int id, ChangeUserStatusDTO changeStatusDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> ToggleUserStatusAsync(int id, ChangeUserStatusDTO changeStatusDTO)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null)
         {
-            return new ApiResponse<UserResponseDTO>(404, "User not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "User not found.");
         }
 
         user.Is_Active = changeStatusDTO.IsActive;
@@ -168,7 +153,7 @@ public class UsersService : IUsersService
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
-            return new ApiResponse<UserResponseDTO>(400, errors);
+            return new ApiResponse<ConfirmationResponseDTO>(400, errors);
         }
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -187,15 +172,18 @@ public class UsersService : IUsersService
             RoleId = roleId
         };
 
-        return new ApiResponse<UserResponseDTO>(200, userResponse);
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = $"User status updated successfully to {(user.Is_Active ? "Active" : "Inactive")}."
+        });
     }
 
-    public async Task<ApiResponse<string>> DeleteUserAsync(int id)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteUserAsync(int id)
     {
         var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null)
         {
-            return new ApiResponse<string>(404, "User not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "User not found.");
         }
 
         // Soft Delete: Disable account to block future logins
@@ -204,9 +192,12 @@ public class UsersService : IUsersService
         if (!result.Succeeded)
         {
             var errors = result.Errors.Select(e => e.Description).ToList();
-            return new ApiResponse<string>(400, errors);
+            return new ApiResponse<ConfirmationResponseDTO>(400, errors);
         }
 
-        return new ApiResponse<string>(200, "User deleted successfully.");
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = "User deleted successfully."
+        });
     }
 }

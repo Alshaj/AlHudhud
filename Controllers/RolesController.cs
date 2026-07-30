@@ -18,7 +18,7 @@ public class RolesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<IEnumerable<RoleResponseDTO>>>> GetRoles()
+    public async Task<ActionResult<ApiResponse<List<RoleResponseDTO>>>> GetRoles()
     {
         var response = await _rolesService.GetAllRolesAsync();
         if (response.StatusCode != 200)

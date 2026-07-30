@@ -46,7 +46,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> Logout()
     {
         var response = await _authService.LogoutAsync();
         if (response.StatusCode != 200)

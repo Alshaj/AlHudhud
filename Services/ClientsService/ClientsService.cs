@@ -14,7 +14,7 @@ public class ClientsService : IClientsService
         _context = context;
     }
 
-    public async Task<ApiResponse<IEnumerable<ClientResponseDTO>>> GetAllClientsAsync()
+    public async Task<ApiResponse<List<ClientResponseDTO>>> GetAllClientsAsync()
     {
         var clients = await _context.Clients
             .Select(c => new ClientResponseDTO
@@ -27,7 +27,7 @@ public class ClientsService : IClientsService
             })
             .ToListAsync();
 
-        return new ApiResponse<IEnumerable<ClientResponseDTO>>(200, clients);
+        return new ApiResponse<List<ClientResponseDTO>>(200, clients);
     }
 
     public async Task<ApiResponse<ClientResponseDTO>> GetClientByIdAsync(int id)
@@ -50,7 +50,7 @@ public class ClientsService : IClientsService
         return new ApiResponse<ClientResponseDTO>(200, clientDTO);
     }
 
-    public async Task<ApiResponse<ClientResponseDTO>> CreateClientAsync(CreateClientRequestDTO createClientDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> CreateClientAsync(CreateClientRequestDTO createClientDTO)
     {
         var client = new Client
         {
@@ -72,15 +72,18 @@ public class ClientsService : IClientsService
             CompanyType = client.CompanyType
         };
 
-        return new ApiResponse<ClientResponseDTO>(201, clientResponse);
+        return new ApiResponse<ConfirmationResponseDTO>(201, new ConfirmationResponseDTO
+        {
+            Message = "Client created successfully."
+        });
     }
 
-    public async Task<ApiResponse<ClientResponseDTO>> UpdateClientAsync(int id, UpdateClientRequestDTO updateClientDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> UpdateClientAsync(int id, UpdateClientRequestDTO updateClientDTO)
     {
         var client = await _context.Clients.FindAsync(id);
         if (client == null)
         {
-            return new ApiResponse<ClientResponseDTO>(404, "Client not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Client not found.");
         }
 
         client.ClientName = updateClientDTO.ClientName;
@@ -90,16 +93,10 @@ public class ClientsService : IClientsService
 
         await _context.SaveChangesAsync();
 
-        var clientResponse = new ClientResponseDTO
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
         {
-            Id = client.Id,
-            ClientName = client.ClientName,
-            TaxNumber = client.TaxNumber,
-            Email = client.Email,
-            CompanyType = client.CompanyType
-        };
-
-        return new ApiResponse<ClientResponseDTO>(200, clientResponse);
+            Message = "Client updated successfully."
+        });
     }
 
     public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteClientAsync(int id)

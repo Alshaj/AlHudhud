@@ -18,7 +18,7 @@ public class ProposalsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<IEnumerable<ProposalResponseDTO>>>> GetProposals()
+    public async Task<ActionResult<ApiResponse<List<ProposalResponseDTO>>>> GetProposals()
     {
         var response = await _proposalsService.GetAllProposalsAsync();
         if (response.StatusCode != 200)
@@ -41,27 +41,27 @@ public class ProposalsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ProposalResponseDTO>>> CreateProposal([FromBody] CreateProposalRequestDTO createProposalDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> CreateProposal([FromBody] CreateProposalRequestDTO createProposalDTO)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<ProposalResponseDTO>(400, "Invalid proposal data."));
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid proposal data."));
         }
         var response = await _proposalsService.CreateProposalAsync(createProposalDTO);
         if (response.StatusCode != 201)
         {
             return StatusCode(response.StatusCode, response);
         }
-        return StatusCode(201, response);
+        return Ok(response);
     }
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ProposalResponseDTO>>> UpdateProposal(int id, [FromBody] UpdateProposalRequestDTO updateProposalDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> UpdateProposal(int id, [FromBody] UpdateProposalRequestDTO updateProposalDTO)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<ProposalResponseDTO>(400, "Invalid proposal data."));
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid proposal data."));
         }
         var response = await _proposalsService.UpdateProposalAsync(id, updateProposalDTO);
         if (response.StatusCode != 200)
@@ -73,23 +73,23 @@ public class ProposalsController : ControllerBase
 
     [HttpPost("{id}/version")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ProposalResponseDTO>>> CreateProposalVersion(int id, [FromBody] CreateProposalVersionRequestDTO versionDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> CreateProposalVersion(int id, [FromBody] CreateProposalVersionRequestDTO versionDTO)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<ProposalResponseDTO>(400, "Invalid version data."));
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid version data."));
         }
         var response = await _proposalsService.CreateProposalVersionAsync(id, versionDTO);
         if (response.StatusCode != 201)
         {
             return StatusCode(response.StatusCode, response);
         }
-        return StatusCode(201, response);
+        return Ok(response);
     }
 
     [HttpPatch("{id}/approve")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ProposalResponseDTO>>> ApproveProposal(int id)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> ApproveProposal(int id)
     {
         var response = await _proposalsService.ApproveProposalAsync(id);
         if (response.StatusCode != 200)
@@ -101,7 +101,7 @@ public class ProposalsController : ControllerBase
 
     [HttpPatch("{id}/reject")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ProposalResponseDTO>>> RejectProposal(int id)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> RejectProposal(int id)
     {
         var response = await _proposalsService.RejectProposalAsync(id);
         if (response.StatusCode != 200)
