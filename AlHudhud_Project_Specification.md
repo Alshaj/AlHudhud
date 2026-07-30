@@ -76,7 +76,9 @@ Proposal fields:
 - Proposal Number
 - Price
 - VAT
-- Refered By
+- Refered By (Can be any system user with any role)
+- Received Amount (Optional, can be null when the proposal is not approved)
+- Pending Amount (Nullable if Received Amount is null)
 - Status
 - Version Number
 - Notes
@@ -494,3 +496,4 @@ One Certificate per ProjectScope
 13. Creating a Certificate closes the ProjectScope.
 14. Closed ProjectScopes cannot receive new Proposals or Inspections.
 15. Historical Proposal versions must always be preserved.
+16. The "Referred By" field on proposals can refer to any system user with any role.

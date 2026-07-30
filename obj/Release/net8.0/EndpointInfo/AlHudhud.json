@@ -588,242 +588,6 @@
         }
       }
     },
-    "/api/Proposals/{id}": {
-      "get": {
-        "tags": [
-          "Proposals"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProposalDetailsWithHistoryResponseDTOApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProposalDetailsWithHistoryResponseDTOApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProposalDetailsWithHistoryResponseDTOApiResponse"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Proposals"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateProposalRequestDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateProposalRequestDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateProposalRequestDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Proposals/{id}/version": {
-      "post": {
-        "tags": [
-          "Proposals"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProposalVersionRequestDTO"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProposalVersionRequestDTO"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProposalVersionRequestDTO"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Proposals/{id}/approve": {
-      "patch": {
-        "tags": [
-          "Proposals"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Proposals/{id}/reject": {
-      "patch": {
-        "tags": [
-          "Proposals"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/Roles": {
       "get": {
         "tags": [
@@ -1519,7 +1283,7 @@
           "location",
           "price",
           "projectName",
-          "referedBy",
+          "referedById",
           "scopeOfWorkId"
         ],
         "type": "object",
@@ -1529,20 +1293,20 @@
             "format": "int32"
           },
           "projectName": {
-            "maxLength": 200,
-            "minLength": 0,
+            "maxLength": 100,
+            "minLength": 2,
             "type": "string"
           },
           "location": {
-            "maxLength": 500,
-            "minLength": 0,
+            "maxLength": 100,
+            "minLength": 2,
             "type": "string"
           },
           "scopeOfWorkId": {
             "type": "integer",
             "format": "int32"
           },
-          "referedBy": {
+          "referedById": {
             "type": "integer",
             "format": "int32"
           },
@@ -1550,41 +1314,6 @@
             "minimum": 0.01,
             "type": "number",
             "format": "double"
-          },
-          "receivedFromClient": {
-            "minimum": 0,
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "notes": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateProposalVersionRequestDTO": {
-        "required": [
-          "price",
-          "referedBy"
-        ],
-        "type": "object",
-        "properties": {
-          "referedBy": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "price": {
-            "minimum": 0.01,
-            "type": "number",
-            "format": "double"
-          },
-          "receivedFromClient": {
-            "minimum": 0,
-            "type": "number",
-            "format": "double",
-            "nullable": true
           },
           "notes": {
             "type": "string",
@@ -1727,45 +1456,6 @@
         },
         "additionalProperties": false
       },
-      "ProposalDetailsWithHistoryResponseDTO": {
-        "type": "object",
-        "properties": {
-          "details": {
-            "$ref": "#/components/schemas/ProposalResponseDTO"
-          },
-          "history": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProposalResponseDTO"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProposalDetailsWithHistoryResponseDTOApiResponse": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "$ref": "#/components/schemas/ProposalDetailsWithHistoryResponseDTO"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ProposalResponseDTO": {
         "type": "object",
         "properties": {
@@ -1777,31 +1467,15 @@
             "type": "string",
             "nullable": true
           },
-          "projectScopeId": {
-            "type": "integer",
-            "format": "int32"
+          "clientName": {
+            "type": "string",
+            "nullable": true
           },
           "projectName": {
             "type": "string",
             "nullable": true
           },
-          "clientName": {
-            "type": "string",
-            "nullable": true
-          },
-          "statusId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "statusName": {
-            "type": "string",
-            "nullable": true
-          },
           "referedBy": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "referedByUserName": {
             "type": "string",
             "nullable": true
           },
@@ -1813,21 +1487,15 @@
             "type": "number",
             "format": "double"
           },
-          "receivedFromClient": {
+          "totalAmount": {
             "type": "number",
-            "format": "double",
-            "nullable": true
+            "format": "double"
           },
-          "pendingAmount": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           },
-          "versionNumber": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "notes": {
+          "status": {
             "type": "string",
             "nullable": true
           }
@@ -2036,35 +1704,6 @@
           "companyType": {
             "maxLength": 50,
             "minLength": 0,
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateProposalRequestDTO": {
-        "required": [
-          "price",
-          "referedBy"
-        ],
-        "type": "object",
-        "properties": {
-          "referedBy": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "price": {
-            "minimum": 0.01,
-            "type": "number",
-            "format": "double"
-          },
-          "receivedFromClient": {
-            "minimum": 0,
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "notes": {
             "type": "string",
             "nullable": true
           }

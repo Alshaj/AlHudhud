@@ -66,6 +66,8 @@ builder.Services.AddScoped<IRolesService, RolesService>();
 // Proposals Service
 builder.Services.AddScoped<IProposalsService, ProposalsService>();
 
+
+
 // JWT Authentication Configuration
 builder.Services.AddAuthentication(options =>
 {
