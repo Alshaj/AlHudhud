@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AlHudhud")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4a2bed57b17c5127b2a0702c073f8b906b8751e8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64e0bae144614bfcaf37f6928390292dddf8edeb")]
 [assembly: System.Reflection.AssemblyProductAttribute("AlHudhud")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AlHudhud")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

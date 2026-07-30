@@ -8,4 +8,5 @@ public interface IProposalsService
     Task<ApiResponse<List<ProposalResponseDTO>>> GetAllProposalsAsync();
     Task<ApiResponse<ConfirmationResponseDTO>> CreateProposalAsync(CreateProposalRequestDTO request);
     Task<ApiResponse<ConfirmationResponseDTO>> UpdateProposalAsync(int id, UpdateProposalRequestDTO request);
+    Task<ApiResponse<ConfirmationResponseDTO>> ChangeProposalStatusAsync(int id, ChangeProposalStatusDTO request);
 }

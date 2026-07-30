@@ -62,4 +62,21 @@ public class ProposalsController : ControllerBase
         }
         return Ok(response);
     }
+
+    [HttpPatch("{id}/status")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> ChangeProposalStatus(int id, [FromBody] ChangeProposalStatusDTO statusDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid status data."));
+        }
+
+        var response = await _proposalsService.ChangeProposalStatusAsync(id, statusDTO);
+        if (response.StatusCode != 200)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
+    }
 }
