@@ -130,13 +130,21 @@ public class ProposalsService : IProposalsService
 
     public async Task<ApiResponse<ProposalResponseDTO>> CreateProposalAsync(CreateProposalRequestDTO createProposalDTO)
     {
-        var scopeExists = await _context.Projects_Scopes.AnyAsync(s => s.Id == createProposalDTO.ProjectScopeId);
-        if (!scopeExists)
+        // 1. Verify Client exists
+        var clientExists = await _context.Clients.AnyAsync(c => c.Id == createProposalDTO.ClientId);
+        if (!clientExists)
         {
-            return new ApiResponse<ProposalResponseDTO>(400, "Invalid ProjectScopeId.");
+            return new ApiResponse<ProposalResponseDTO>(400, "Invalid ClientId.");
         }
 
-        // Validate Referred By user exists and is an Inspector (RoleId = 2)
+        // 2. Verify Scope of Work exists
+        var scopeOfWorkExists = await _context.ScopesOfWork.AnyAsync(s => s.Id == createProposalDTO.ScopeOfWorkId);
+        if (!scopeOfWorkExists)
+        {
+            return new ApiResponse<ProposalResponseDTO>(400, "Invalid ScopeOfWorkId.");
+        }
+
+        // 3. Validate Inspector user role
         var isInspector = await _context.UserRoles
             .AnyAsync(ur => ur.UserId == createProposalDTO.ReferedBy && ur.RoleId == 2);
         if (!isInspector)
@@ -144,7 +152,38 @@ public class ProposalsService : IProposalsService
             return new ApiResponse<ProposalResponseDTO>(400, "Referred user must exist and have the Inspector role.");
         }
 
-        // Generate sequential ProposalNumber: AH-YYxxxx
+        // 4. Resolve or Create Project
+        var project = await _context.Projects
+            .FirstOrDefaultAsync(p => p.Name == createProposalDTO.ProjectName && p.ClientId == createProposalDTO.ClientId);
+        if (project == null)
+        {
+            project = new Project
+            {
+                ClientId = createProposalDTO.ClientId,
+                Name = createProposalDTO.ProjectName,
+                Location = createProposalDTO.Location
+            };
+            _context.Projects.Add(project);
+            await _context.SaveChangesAsync(); // Save to generate Project.Id
+        }
+
+        // 5. Resolve or Create ProjectScope
+        var projectScope = await _context.Projects_Scopes
+            .FirstOrDefaultAsync(ps => ps.ProjectId == project.Id && ps.ScopeOfWorkId == createProposalDTO.ScopeOfWorkId);
+        if (projectScope == null)
+        {
+            projectScope = new ProjectScope
+            {
+                ProjectId = project.Id,
+                ScopeOfWorkId = createProposalDTO.ScopeOfWorkId,
+                Location = createProposalDTO.Location,
+                Projects_Scopes_Statuses_Id = 1 // Inprogress
+            };
+            _context.Projects_Scopes.Add(projectScope);
+            await _context.SaveChangesAsync(); // Save to generate ProjectScope.Id
+        }
+
+        // 6. Generate sequential ProposalNumber: AH-YYxxxx
         var currentYearPrefix = $"AH-{DateTime.UtcNow:yy}";
         var lastProposal = await _context.Proposals
             .Where(p => p.ProposalNumber.StartsWith(currentYearPrefix))
@@ -168,7 +207,7 @@ public class ProposalsService : IProposalsService
         var proposal = new Proposal
         {
             ProposalNumber = proposalNumber,
-            ProjectScopeId = createProposalDTO.ProjectScopeId,
+            ProjectScopeId = projectScope.Id,
             StatusId = 1, // Pending
             ReferedBy = createProposalDTO.ReferedBy,
             Price = createProposalDTO.Price,
