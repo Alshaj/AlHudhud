@@ -85,7 +85,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "AlHudhud.Controllers.AuthController",
@@ -169,7 +179,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.IEnumerable\u00601[[BestPriceStore.DTOs.ClientResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.List\u00601[[BestPriceStore.DTOs.ClientResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -195,7 +205,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ClientResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -252,7 +262,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ClientResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -298,7 +308,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.IEnumerable\u00601[[BestPriceStore.DTOs.ProposalResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.List\u00601[[BestPriceStore.DTOs.ProposalResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -324,7 +334,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ProposalResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -381,7 +391,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ProposalResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -407,7 +417,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ProposalResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -433,7 +443,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ProposalResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -464,7 +474,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ProposalResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -484,7 +494,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.IEnumerable\u00601[[BestPriceStore.DTOs.RoleResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.List\u00601[[BestPriceStore.DTOs.RoleResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -504,7 +514,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.IEnumerable\u00601[[BestPriceStore.DTOs.ScopeOfWorkResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.List\u00601[[BestPriceStore.DTOs.ScopeOfWorkResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -633,7 +643,7 @@
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.IEnumerable\u00601[[BestPriceStore.DTOs.UserResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.Collections.Generic.List\u00601[[BestPriceStore.DTOs.UserResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -659,7 +669,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.UserResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -716,7 +726,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.UserResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -742,7 +752,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -773,7 +783,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.UserResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "BestPriceStore.DTOs.ApiResponse\u00601[[BestPriceStore.DTOs.ConfirmationResponseDTO, AlHudhud, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

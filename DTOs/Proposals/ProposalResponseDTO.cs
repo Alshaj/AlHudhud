@@ -13,8 +13,8 @@ public class ProposalResponseDTO
     public string ReferedByUserName { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public decimal Vat { get; set; }
-    public decimal ReceivedFromClient { get; set; }
-    public decimal PendingAmount { get; set; }
+    public decimal? ReceivedFromClient { get; set; }
+    public decimal? PendingAmount { get; set; }
     public int VersionNumber { get; set; }
     public string Notes { get; set; } = string.Empty;
 }

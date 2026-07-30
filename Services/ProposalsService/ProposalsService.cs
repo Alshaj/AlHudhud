@@ -208,7 +208,9 @@ public class ProposalsService : IProposalsService
         var proposalNumber = $"{currentYearPrefix}{nextSeq:D4}";
 
         var vat = createProposalDTO.Price * 0.05m;
-        var pending = (createProposalDTO.Price + vat) - createProposalDTO.ReceivedFromClient;
+        decimal? pending = createProposalDTO.ReceivedFromClient.HasValue
+            ? (createProposalDTO.Price + vat) - createProposalDTO.ReceivedFromClient.Value
+            : null;
 
         var proposal = new Proposal
         {
@@ -254,7 +256,9 @@ public class ProposalsService : IProposalsService
         }
 
         var vat = updateProposalDTO.Price * 0.05m;
-        var pending = (updateProposalDTO.Price + vat) - updateProposalDTO.ReceivedFromClient;
+        decimal? pending = updateProposalDTO.ReceivedFromClient.HasValue
+            ? (updateProposalDTO.Price + vat) - updateProposalDTO.ReceivedFromClient.Value
+            : null;
 
         // Perform In-Place Update (No new row created)
         existing.ReferedBy = updateProposalDTO.ReferedBy;
@@ -295,7 +299,9 @@ public class ProposalsService : IProposalsService
             .MaxAsync(p => p.VersionNumber);
 
         var vat = versionDTO.Price * 0.05m;
-        var pending = (versionDTO.Price + vat) - versionDTO.ReceivedFromClient;
+        decimal? pending = versionDTO.ReceivedFromClient.HasValue
+            ? (versionDTO.Price + vat) - versionDTO.ReceivedFromClient.Value
+            : null;
 
         // Create new Proposal Version row
         var newVersion = new Proposal

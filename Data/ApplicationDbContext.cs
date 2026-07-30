@@ -41,6 +41,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .HasForeignKey(p => p.ReferedBy)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // Define relations with ProposalStatus in Proposals
+        builder.Entity<Proposal>()
+            .HasOne(p => p.ProposalStatus)
+            .WithMany(s => s.Proposals)
+            .HasForeignKey(p => p.StatusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Define relations with Inspector in Inspections
         builder.Entity<Inspection>()
             .HasOne(i => i.Inspector)
