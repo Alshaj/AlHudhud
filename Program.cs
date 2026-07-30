@@ -6,6 +6,7 @@ using AlHudhud.Services.ClientsService;
 using AlHudhud.Services.ScopesOfWorkService;
 using AlHudhud.Services.UsersService;
 using AlHudhud.Services.RolesService;
+using AlHudhud.Services.ProposalsService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,9 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 
 // Roles Service
 builder.Services.AddScoped<IRolesService, RolesService>();
+
+// Proposals Service
+builder.Services.AddScoped<IProposalsService, ProposalsService>();
 
 // JWT Authentication Configuration
 builder.Services.AddAuthentication(options =>
