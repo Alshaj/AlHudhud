@@ -40,6 +40,9 @@ public class ProposalsService : IProposalsService
                 ScopeOfWork = p.ProjectScope != null && p.ProjectScope.ScopeOfWork != null
                     ? p.ProjectScope.ScopeOfWork.Name
                     : string.Empty,
+                Location = p.ProjectScope != null
+                    ? p.ProjectScope.Location
+                    : string.Empty,
                 ReferedBy = p.ReferedByUser != null
                     ? p.ReferedByUser.UserName ?? string.Empty
                     : string.Empty,
