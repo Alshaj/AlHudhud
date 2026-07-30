@@ -4,6 +4,7 @@ using AlHudhud.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlHudhud.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260730142930_MakeReceivedAndPendingNullable")]
+    partial class MakeReceivedAndPendingNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -364,6 +367,9 @@ namespace AlHudhud.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProposalStatusId")
+                        .HasColumnType("int");
+
                     b.Property<decimal?>("ReceivedFromClient")
                         .HasColumnType("decimal(18, 2)");
 
@@ -383,9 +389,9 @@ namespace AlHudhud.Migrations
 
                     b.HasIndex("ProjectScopeId");
 
-                    b.HasIndex("ReferedBy");
+                    b.HasIndex("ProposalStatusId");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("ReferedBy");
 
                     b.ToTable("Proposals");
                 });
@@ -647,15 +653,13 @@ namespace AlHudhud.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AlHudhud.Models.ProposalStatus", "ProposalStatus")
+                        .WithMany("Proposals")
+                        .HasForeignKey("ProposalStatusId");
+
                     b.HasOne("AlHudhud.Models.ApplicationUser", "ReferedByUser")
                         .WithMany("ProposalsReferred")
                         .HasForeignKey("ReferedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AlHudhud.Models.ProposalStatus", "ProposalStatus")
-                        .WithMany("Proposals")
-                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

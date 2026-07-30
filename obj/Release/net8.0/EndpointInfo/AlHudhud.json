@@ -89,7 +89,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -297,17 +314,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ClientResponseDTOListApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ClientResponseDTOListApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ClientResponseDTOListApiResponse"
                 }
               }
             }
@@ -343,17 +360,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -440,17 +457,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClientResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -507,17 +524,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ProposalResponseDTOListApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ProposalResponseDTOListApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ProposalResponseDTOListApiResponse"
                 }
               }
             }
@@ -553,17 +570,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -650,17 +667,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -709,17 +726,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -749,17 +766,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -789,17 +806,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProposalResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -818,17 +835,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/RoleResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/RoleResponseDTOListApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RoleResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/RoleResponseDTOListApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RoleResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/RoleResponseDTOListApiResponse"
                 }
               }
             }
@@ -847,17 +864,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ScopeOfWorkResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ScopeOfWorkResponseDTOListApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ScopeOfWorkResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ScopeOfWorkResponseDTOListApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ScopeOfWorkResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/ScopeOfWorkResponseDTOListApiResponse"
                 }
               }
             }
@@ -1057,17 +1074,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/UserResponseDTOListApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/UserResponseDTOListApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOIEnumerableApiResponse"
+                  "$ref": "#/components/schemas/UserResponseDTOListApiResponse"
                 }
               }
             }
@@ -1103,17 +1120,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -1200,17 +1217,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -1238,17 +1255,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/StringApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StringApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StringApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -1297,17 +1314,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTOApiResponse"
+                  "$ref": "#/components/schemas/ConfirmationResponseDTOApiResponse"
                 }
               }
             }
@@ -1403,7 +1420,7 @@
         },
         "additionalProperties": false
       },
-      "ClientResponseDTOIEnumerableApiResponse": {
+      "ClientResponseDTOListApiResponse": {
         "type": "object",
         "properties": {
           "statusCode": {
@@ -1498,13 +1515,30 @@
       },
       "CreateProposalRequestDTO": {
         "required": [
+          "clientId",
+          "location",
           "price",
-          "projectScopeId",
-          "referedBy"
+          "projectName",
+          "referedBy",
+          "scopeOfWorkId"
         ],
         "type": "object",
         "properties": {
-          "projectScopeId": {
+          "clientId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "projectName": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "location": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string"
+          },
+          "scopeOfWorkId": {
             "type": "integer",
             "format": "int32"
           },
@@ -1520,7 +1554,8 @@
           "receivedFromClient": {
             "minimum": 0,
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "notes": {
             "type": "string",
@@ -1548,7 +1583,8 @@
           "receivedFromClient": {
             "minimum": 0,
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "notes": {
             "type": "string",
@@ -1779,11 +1815,13 @@
           },
           "receivedFromClient": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "pendingAmount": {
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "versionNumber": {
             "type": "integer",
@@ -1796,30 +1834,7 @@
         },
         "additionalProperties": false
       },
-      "ProposalResponseDTOApiResponse": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "$ref": "#/components/schemas/ProposalResponseDTO"
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProposalResponseDTOIEnumerableApiResponse": {
+      "ProposalResponseDTOListApiResponse": {
         "type": "object",
         "properties": {
           "statusCode": {
@@ -1900,7 +1915,7 @@
         },
         "additionalProperties": false
       },
-      "RoleResponseDTOIEnumerableApiResponse": {
+      "RoleResponseDTOListApiResponse": {
         "type": "object",
         "properties": {
           "statusCode": {
@@ -1967,7 +1982,7 @@
         },
         "additionalProperties": false
       },
-      "ScopeOfWorkResponseDTOIEnumerableApiResponse": {
+      "ScopeOfWorkResponseDTOListApiResponse": {
         "type": "object",
         "properties": {
           "statusCode": {
@@ -1982,30 +1997,6 @@
             "items": {
               "$ref": "#/components/schemas/ScopeOfWorkResponseDTO"
             },
-            "nullable": true
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "StringApiResponse": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "success": {
-            "type": "boolean"
-          },
-          "data": {
-            "type": "string",
             "nullable": true
           },
           "errors": {
@@ -2070,7 +2061,8 @@
           "receivedFromClient": {
             "minimum": 0,
             "type": "number",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "notes": {
             "type": "string",
@@ -2182,7 +2174,7 @@
         },
         "additionalProperties": false
       },
-      "UserResponseDTOIEnumerableApiResponse": {
+      "UserResponseDTOListApiResponse": {
         "type": "object",
         "properties": {
           "statusCode": {

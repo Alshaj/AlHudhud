@@ -12,7 +12,7 @@ public class CreateProposalVersionRequestDTO
     public decimal Price { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "Received amount cannot be negative.")]
-    public decimal ReceivedFromClient { get; set; }
+    public decimal? ReceivedFromClient { get; set; }
 
     public string Notes { get; set; } = string.Empty;
 }

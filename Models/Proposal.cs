@@ -17,10 +17,10 @@ public class Proposal
     public decimal Vat { get; set; }
 
     [Column(TypeName = "decimal(18, 2)")]
-    public decimal ReceivedFromClient { get; set; }
+    public decimal? ReceivedFromClient { get; set; }
 
     [Column(TypeName = "decimal(18, 2)")]
-    public decimal PendingAmount { get; set; }
+    public decimal? PendingAmount { get; set; }
 
     public int VersionNumber { get; set; }
     public string Notes { get; set; } = string.Empty;
