@@ -18,7 +18,7 @@ public class ScopeOfWorkController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<IEnumerable<ScopeOfWorkResponseDTO>>>> GetScopes()
+    public async Task<ActionResult<ApiResponse<List<ScopeOfWorkResponseDTO>>>> GetScopes()
     {
         var response = await _scopesService.GetAllScopesAsync();
         if (response.StatusCode != 200)
@@ -52,7 +52,7 @@ public class ScopeOfWorkController : ControllerBase
         {
             return StatusCode(response.StatusCode, response);
         }
-        return StatusCode(201, response);
+        return Ok(response);
     }
 
     [HttpPut("{id}")]

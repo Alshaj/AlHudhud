@@ -14,7 +14,7 @@ public class ScopesOfWorkService : IScopesOfWorkService
         _context = context;
     }
 
-    public async Task<ApiResponse<IEnumerable<ScopeOfWorkResponseDTO>>> GetAllScopesAsync()
+    public async Task<ApiResponse<List<ScopeOfWorkResponseDTO>>> GetAllScopesAsync()
     {
         var scopes = await _context.ScopesOfWork
             .Where(s => !s.IsDeleted)
@@ -26,7 +26,12 @@ public class ScopesOfWorkService : IScopesOfWorkService
             })
             .ToListAsync();
 
-        return new ApiResponse<IEnumerable<ScopeOfWorkResponseDTO>>(200, scopes);
+        if(scopes == null )
+        {
+            return new ApiResponse<List<ScopeOfWorkResponseDTO>>(404, "No scopes of work found.");
+        }
+
+        return new ApiResponse<List<ScopeOfWorkResponseDTO>>(200, scopes);
     }
 
     public async Task<ApiResponse<ScopeOfWorkResponseDTO>> GetScopeByIdAsync(int id)
@@ -47,7 +52,7 @@ public class ScopesOfWorkService : IScopesOfWorkService
         return new ApiResponse<ScopeOfWorkResponseDTO>(200, scopeDTO);
     }
 
-    public async Task<ApiResponse<ScopeOfWorkResponseDTO>> CreateScopeAsync(CreateScopeOfWorkRequestDTO createScopeDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> CreateScopeAsync(CreateScopeOfWorkRequestDTO createScopeDTO)
     {
         var scope = new ScopeOfWork
         {
@@ -58,22 +63,21 @@ public class ScopesOfWorkService : IScopesOfWorkService
         _context.ScopesOfWork.Add(scope);
         await _context.SaveChangesAsync();
 
-        var scopeResponse = new ScopeOfWorkResponseDTO
+        return new ApiResponse<ConfirmationResponseDTO>(201, new ConfirmationResponseDTO
         {
-            Id = scope.Id,
-            Name = scope.Name,
-            IsNeedInspection = scope.IsNeedInspection
-        };
-
-        return new ApiResponse<ScopeOfWorkResponseDTO>(201, scopeResponse);
+            Message = "Scope of work created successfully."
+        });
     }
 
-    public async Task<ApiResponse<ScopeOfWorkResponseDTO>> UpdateScopeAsync(int id, UpdateScopeOfWorkRequestDTO updateScopeDTO)
+    public async Task<ApiResponse<ConfirmationResponseDTO>> UpdateScopeAsync(int id, UpdateScopeOfWorkRequestDTO updateScopeDTO)
     {
         var scope = await _context.ScopesOfWork.FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
         if (scope == null)
         {
-            return new ApiResponse<ScopeOfWorkResponseDTO>(404, "Scope of work not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, new ConfirmationResponseDTO
+            {
+                Message = "Scope of work not found."
+            });
         }
 
         scope.Name = updateScopeDTO.Name;
@@ -88,7 +92,10 @@ public class ScopesOfWorkService : IScopesOfWorkService
             IsNeedInspection = scope.IsNeedInspection
         };
 
-        return new ApiResponse<ScopeOfWorkResponseDTO>(200, scopeResponse);
+        return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
+        {
+            Message = "Scope of work updated successfully."
+        });
     }
 
     public async Task<ApiResponse<ConfirmationResponseDTO>> DeleteScopeAsync(int id)
@@ -96,7 +103,10 @@ public class ScopesOfWorkService : IScopesOfWorkService
         var scope = await _context.ScopesOfWork.FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
         if (scope == null)
         {
-            return new ApiResponse<ConfirmationResponseDTO>(404, "Scope of work not found.");
+            return new ApiResponse<ConfirmationResponseDTO>(404, new ConfirmationResponseDTO
+            {
+                Message = "Scope of work not found."
+            });
         }
 
         // Soft Delete

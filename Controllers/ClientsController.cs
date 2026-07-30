@@ -18,7 +18,7 @@ public class ClientsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<IEnumerable<ClientResponseDTO>>>> GetAllClients()
+    public async Task<ActionResult<ApiResponse<List<ClientResponseDTO>>>> GetAllClients()
     {
         var response = await _clientsService.GetAllClientsAsync();
         if (response.StatusCode != 200)
@@ -41,27 +41,27 @@ public class ClientsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ClientResponseDTO>>> CreateClient([FromBody] CreateClientRequestDTO createClientDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> CreateClient([FromBody] CreateClientRequestDTO createClientDTO)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<ClientResponseDTO>(400, "Invalid client data."));
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid client data."));
         }
         var response = await _clientsService.CreateClientAsync(createClientDTO);
         if (response.StatusCode != 201)
         {
             return StatusCode(response.StatusCode, response);
         }
-        return StatusCode(201, response);
+        return Ok(response);
     }
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ClientResponseDTO>>> UpdateClient(int id, [FromBody] UpdateClientRequestDTO updateClientDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> UpdateClient(int id, [FromBody] UpdateClientRequestDTO updateClientDTO)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<ClientResponseDTO>(400, "Invalid client data."));
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid client data."));
         }
         var response = await _clientsService.UpdateClientAsync(id, updateClientDTO);
         if (response.StatusCode != 200)

@@ -4,9 +4,9 @@ namespace AlHudhud.Services.ClientsService;
 
 public interface IClientsService
 {
-    Task<ApiResponse<IEnumerable<ClientResponseDTO>>> GetAllClientsAsync();
+    Task<ApiResponse<List<ClientResponseDTO>>> GetAllClientsAsync();
     Task<ApiResponse<ClientResponseDTO>> GetClientByIdAsync(int id);
-    Task<ApiResponse<ClientResponseDTO>> CreateClientAsync(CreateClientRequestDTO createClientDTO);
-    Task<ApiResponse<ClientResponseDTO>> UpdateClientAsync(int id, UpdateClientRequestDTO updateClientDTO);
+    Task<ApiResponse<ConfirmationResponseDTO>> CreateClientAsync(CreateClientRequestDTO createClientDTO);
+    Task<ApiResponse<ConfirmationResponseDTO>> UpdateClientAsync(int id, UpdateClientRequestDTO updateClientDTO);
     Task<ApiResponse<ConfirmationResponseDTO>> DeleteClientAsync(int id);
 }

@@ -18,7 +18,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<IEnumerable<UserResponseDTO>>>> GetUsers()
+    public async Task<ActionResult<ApiResponse<List<UserResponseDTO>>>> GetUsers()
     {
         var response = await _usersService.GetAllUsersAsync();
         if (response.StatusCode != 200)
@@ -41,27 +41,27 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<UserResponseDTO>>> CreateUser([FromBody] CreateUserRequestDTO createUserDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> CreateUser([FromBody] CreateUserRequestDTO createUserDTO)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<UserResponseDTO>(400, "Invalid user data."));
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid user data."));
         }
         var response = await _usersService.CreateUserAsync(createUserDTO);
         if (response.StatusCode != 201)
         {
             return StatusCode(response.StatusCode, response);
         }
-        return StatusCode(201, response);
+        return Ok(response);
     }
 
     [HttpPut("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<UserResponseDTO>>> UpdateUser(int id, [FromBody] UpdateUserRequestDTO updateUserDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> UpdateUser(int id, [FromBody] UpdateUserRequestDTO updateUserDTO)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<UserResponseDTO>(400, "Invalid user data."));
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid user data."));
         }
         var response = await _usersService.UpdateUserAsync(id, updateUserDTO);
         if (response.StatusCode != 200)
@@ -73,7 +73,7 @@ public class UsersController : ControllerBase
 
     [HttpPatch("{id}/status")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<UserResponseDTO>>> ToggleUserStatus(int id, [FromBody] ChangeUserStatusDTO statusDTO)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> ToggleUserStatus(int id, [FromBody] ChangeUserStatusDTO statusDTO)
     {
         if (!ModelState.IsValid)
         {
@@ -89,7 +89,7 @@ public class UsersController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<string>>> DeleteUser(int id)
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> DeleteUser(int id)
     {
         var response = await _usersService.DeleteUserAsync(id);
         if (response.StatusCode != 200)

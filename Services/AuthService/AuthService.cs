@@ -271,7 +271,7 @@ public class AuthService : IAuthService
 
         return new ApiResponse<ConfirmationResponseDTO>(200, new ConfirmationResponseDTO
         {
-            Message = "If the email is registered, a new OTP has been sent."
+            Message = "OTP has been resent successfully. Please check your email."
         });
     }
 
