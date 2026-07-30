@@ -7,6 +7,7 @@ public class ProposalResponseDTO
     public string ClientName { get; set; } = string.Empty;
     public string ProjectName { get; set; } = string.Empty;
     public string ScopeOfWork { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
     public string ReferedBy { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public decimal Vat { get; set; }
