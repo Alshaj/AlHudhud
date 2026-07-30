@@ -5,7 +5,18 @@ namespace BestPriceStore.DTOs;
 public class CreateProposalRequestDTO
 {
     [Required]
-    public int ProjectScopeId { get; set; }
+    public int ClientId { get; set; }
+
+    [Required]
+    [StringLength(200)]
+    public string ProjectName { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(500)]
+    public string Location { get; set; } = string.Empty;
+
+    [Required]
+    public int ScopeOfWorkId { get; set; }
 
     [Required]
     public int ReferedBy { get; set; }

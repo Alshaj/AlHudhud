@@ -15,15 +15,21 @@ Creates a new proposal, generating a sequential numbering string (`AH-YYxxxx`), 
 Since the API uses HttpOnly cookies, the browser will automatically include the `access_token` cookie in the request if credentials are enabled (`withCredentials = true` in Axios or `credentials: 'include'` in Fetch).
 
 ### Request Body (`CreateProposalRequestDTO`)
-- **`projectScopeId`** (int, Required): The target project scope.
-- **`referedBy`** (int, Required): The ID of the user referring the proposal. **Must have the `Inspector` role**.
+- **`clientId`** (int, Required): The ID of the client (selected from clients list).
+- **`projectName`** (string, Required): The name of the project.
+- **`location`** (string, Required): The project location.
+- **`scopeOfWorkId`** (int, Required): The ID of the Scope of Work (selected from scopes list).
+- **`referedBy`** (int, Required): The ID of the referring user (**must have the `Inspector` role**).
 - **`price`** (decimal, Required): The proposal cost before VAT (must be greater than 0).
 - **`receivedFromClient`** (decimal, Required): The payment amount already received from the client.
 - **`notes`** (string, Optional): Remarks or additional specifications.
 
 ```json
 {
-  "projectScopeId": 3,
+  "clientId": 1,
+  "projectName": "Al Masarak Tower",
+  "location": "Dubai Marina, UAE",
+  "scopeOfWorkId": 2,
   "referedBy": 4,
   "price": 10000.00,
   "receivedFromClient": 2000.00,
