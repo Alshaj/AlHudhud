@@ -20,9 +20,12 @@ public class ClientsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ClientResponseDTO>>>> GetAllClients([FromQuery] PaginationParametersDTO pagination)
+    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ClientResponseDTO>>>> GetAllClients(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? search = null)
     {
-        var response = await _clientsService.GetAllClientsAsync(pagination);
+        var response = await _clientsService.GetAllClientsAsync(page, pageSize, search);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);

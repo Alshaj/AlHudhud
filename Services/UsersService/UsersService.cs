@@ -17,16 +17,26 @@ public class UsersService : IUsersService
         _roleManager = roleManager;
     }
 
-    public async Task<ApiResponse<PaginatedResultDTO<UserResponseDTO>>> GetAllUsersAsync(PaginationParametersDTO pagination)
+    public async Task<ApiResponse<PaginatedResultDTO<UserResponseDTO>>> GetAllUsersAsync(int page = 1, int pageSize = 10, string? search = null)
     {
+        page = page < 1 ? 1 : page;
+        pageSize = pageSize < 1 ? 10 : (pageSize > 100 ? 100 : pageSize);
+
         var query = _userManager.Users.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var searchLower = search.Trim().ToLower();
+            query = query.Where(u => (u.UserName != null && u.UserName.ToLower().Contains(searchLower)) ||
+                                     (u.Email != null && u.Email.ToLower().Contains(searchLower)));
+        }
 
         var totalCount = await query.CountAsync();
 
         var usersList = await query
             .OrderBy(u => u.Id)
-            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
-            .Take(pagination.PageSize)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
 
         var usersResponse = new List<UserResponseDTO>();
@@ -53,8 +63,8 @@ public class UsersService : IUsersService
         var result = new PaginatedResultDTO<UserResponseDTO>
         {
             Items = usersResponse,
-            PageNumber = pagination.PageNumber,
-            PageSize = pagination.PageSize,
+            Page = page,
+            PageSize = pageSize,
             TotalCount = totalCount
         };
 

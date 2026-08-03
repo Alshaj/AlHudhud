@@ -20,9 +20,12 @@ public class ProposalsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>>> GetAllProposals([FromQuery] PaginationParametersDTO pagination)
+    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>>> GetAllProposals(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? search = null)
     {
-        var response = await _proposalsService.GetAllProposalsAsync(pagination);
+        var response = await _proposalsService.GetAllProposalsAsync(page, pageSize, search);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);

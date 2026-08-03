@@ -20,12 +20,23 @@ public class ProposalsService : IProposalsService
         _timezoneService = timezoneService;
     }
 
-    public async Task<ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>> GetAllProposalsAsync(PaginationParametersDTO pagination)
+    public async Task<ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>> GetAllProposalsAsync(int page = 1, int pageSize = 10, string? search = null)
     {
+        page = page < 1 ? 1 : page;
+        pageSize = pageSize < 1 ? 10 : (pageSize > 100 ? 100 : pageSize);
+
         var query = _context.Proposals
             .Where(p => p.VersionNumber == _context.Proposals
                 .Where(sub => sub.ProposalNumber == p.ProposalNumber)
                 .Max(sub => sub.VersionNumber));
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var searchLower = search.Trim().ToLower();
+            query = query.Where(p => p.ProposalNumber.ToLower().Contains(searchLower) ||
+                                     (p.ProjectScope != null && p.ProjectScope.Project != null && p.ProjectScope.Project.Name.ToLower().Contains(searchLower)) ||
+                                     (p.ProjectScope != null && p.ProjectScope.Project != null && p.ProjectScope.Project.Client != null && p.ProjectScope.Project.Client.ClientName.ToLower().Contains(searchLower)));
+        }
 
         var totalCount = await query.CountAsync();
 
@@ -38,8 +49,8 @@ public class ProposalsService : IProposalsService
             .Include(p => p.ProposalStatus)
             .Include(p => p.ReferedByUser)
             .OrderByDescending(p => p.CreatedAt)
-            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
-            .Take(pagination.PageSize)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(p => new ProposalResponseDTO
             {
                 Id = p.Id,
@@ -79,8 +90,8 @@ public class ProposalsService : IProposalsService
         var result = new PaginatedResultDTO<ProposalResponseDTO>
         {
             Items = items,
-            PageNumber = pagination.PageNumber,
-            PageSize = pagination.PageSize,
+            Page = page,
+            PageSize = pageSize,
             TotalCount = totalCount
         };
 
