@@ -1,5 +1,6 @@
 using AlHudhud.Data;
 using AlHudhud.DTOs.Clients;
+using AlHudhud.DTOs.Common;
 using AlHudhud.Models;
 using BestPriceStore.DTOs;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,16 @@ public class ClientsService : IClientsService
         _context = context;
     }
 
-    public async Task<ApiResponse<List<ClientResponseDTO>>> GetAllClientsAsync()
+    public async Task<ApiResponse<PaginatedResultDTO<ClientResponseDTO>>> GetAllClientsAsync(PaginationParametersDTO pagination)
     {
-        var clients = await _context.Clients
+        var query = _context.Clients.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(c => c.Id)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
             .Select(c => new ClientResponseDTO
             {
                 Id = c.Id,
@@ -28,7 +36,15 @@ public class ClientsService : IClientsService
             })
             .ToListAsync();
 
-        return new ApiResponse<List<ClientResponseDTO>>(200, clients);
+        var result = new PaginatedResultDTO<ClientResponseDTO>
+        {
+            Items = items,
+            PageNumber = pagination.PageNumber,
+            PageSize = pagination.PageSize,
+            TotalCount = totalCount
+        };
+
+        return new ApiResponse<PaginatedResultDTO<ClientResponseDTO>>(200, result);
     }
 
     public async Task<ApiResponse<ClientResponseDTO>> GetClientByIdAsync(int id)

@@ -31,6 +31,17 @@ export interface CreateProposalVersionRequest {
   notes?: string;
 }
 
+// Paginated Result Wrapper
+export interface PaginatedResult<T> {
+  items: T[];
+  pageNumber: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+}
+
 // Generic API Response Wrapper
 export interface ApiResponse<T> {
   statusCode: number;
@@ -42,22 +53,27 @@ export interface ApiResponse<T> {
 
 ---
 
-## 2. Updated Endpoint: Get All Proposals (Latest Version Only)
+## 2. Updated Endpoint: Get All Proposals (Latest Version Only & Paginated)
 
-The `GET /api/proposals` endpoint has been updated. It now filters and returns **only the latest version** (`highest versionNumber`) for each proposal number, and includes `versionNumber`, `notes`, `scopeOfWork`, and `location` in the response payload.
+The `GET /api/proposals` endpoint filters and returns **only the latest version** (`highest versionNumber`) for each proposal number, paginated with default `pageSize = 20`.
 
-- **URL:** `/api/proposals`
+- **URL:** `/api/proposals?pageNumber=1&pageSize=20`
 - **Method:** `GET`
 - **Authentication Required:** Yes (HttpOnly Cookie `access_token`, `withCredentials: true`)
 - **Roles Allowed:** `Admin`, `Viewer`
 
-### Response Payload (`ApiResponse<ProposalItem[]>`)
+### Query Parameters (Optional):
+- `pageNumber` (number, default: `1`): The 1-indexed page number.
+- `pageSize` (number, default: `20`): Number of proposals per page (Max: 100).
+
+### Response Payload (`ApiResponse<PaginatedResult<ProposalItem>>`)
 
 ```json
 {
   "statusCode": 200,
   "success": true,
-  "data": [
+  "data": {
+    "items": [
     {
       "id": 5,
       "proposalNumber": "AH-260001",
@@ -74,7 +90,14 @@ The `GET /api/proposals` endpoint has been updated. It now filters and returns *
       "versionNumber": 2,
       "notes": "Revised quote after scope meeting."
     }
-  ],
+    ],
+    "pageNumber": 1,
+    "pageSize": 20,
+    "totalCount": 1,
+    "totalPages": 1,
+    "hasPreviousPage": false,
+    "hasNextPage": false
+  },
   "errors": []
 }
 ```

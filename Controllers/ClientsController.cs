@@ -1,4 +1,5 @@
 using AlHudhud.DTOs.Clients;
+using AlHudhud.DTOs.Common;
 using AlHudhud.Services.ClientsService;
 using BestPriceStore.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -19,9 +20,9 @@ public class ClientsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<ClientResponseDTO>>>> GetAllClients()
+    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ClientResponseDTO>>>> GetAllClients([FromQuery] PaginationParametersDTO pagination)
     {
-        var response = await _clientsService.GetAllClientsAsync();
+        var response = await _clientsService.GetAllClientsAsync(pagination);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);

@@ -15,34 +15,49 @@ Retrieves the list of all proposals in the system.
 ### Request Header
 Since the API uses HttpOnly cookies, the browser will automatically include the `access_token` cookie in the request if credentials are enabled (`withCredentials = true` in Axios or `credentials: 'include'` in Fetch).
 
+### Query Parameters (Optional)
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pageNumber` | int | `1` | The 1-indexed page number to retrieve. |
+| `pageSize` | int | `20` | Number of items per page (Min: 1, Max: 100). |
+
 ### Request Body
 None.
 
-### Response Body (`ApiResponse<List<ProposalResponseDTO>>`)
+### Response Body (`ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>`)
 
 #### Success (`200 OK`)
 ```json
 {
   "statusCode": 200,
   "success": true,
-  "data": [
-    {
-      "id": 1,
-      "proposalNumber": "AH-260001",
-      "clientName": "Al Hudhud Consultancy LLC",
-      "projectName": "Warehouse Inspection",
-      "scopeOfWork": "Fire Alarm Inspection",
-      "location": "Dubai Industrial City",
-      "referedBy": "admin@example.com",
-      "price": 10000.00,
-      "vat": 500.00,
-      "totalAmount": 10500.00,
-      "createdAt": "2026-07-30T16:17:30.123Z",
-      "status": "Pending",
-      "versionNumber": 1,
-      "notes": "Urgent inspection requested."
-    }
-  ],
+  "data": {
+    "items": [
+      {
+        "id": 1,
+        "proposalNumber": "AH-260001",
+        "clientName": "Al Hudhud Consultancy LLC",
+        "projectName": "Warehouse Inspection",
+        "scopeOfWork": "Fire Alarm Inspection",
+        "location": "Dubai Industrial City",
+        "referedBy": "admin@example.com",
+        "price": 10000.00,
+        "vat": 500.00,
+        "totalAmount": 10500.00,
+        "createdAt": "2026-07-30T16:17:30.123Z",
+        "status": "Pending",
+        "versionNumber": 1,
+        "notes": "Urgent inspection requested."
+      }
+    ],
+    "pageNumber": 1,
+    "pageSize": 20,
+    "totalCount": 1,
+    "totalPages": 1,
+    "hasPreviousPage": false,
+    "hasNextPage": false
+  },
   "errors": []
 }
 ```

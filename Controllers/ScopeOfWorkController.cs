@@ -1,3 +1,4 @@
+using AlHudhud.DTOs.Common;
 using AlHudhud.Services.ScopesOfWorkService;
 using BestPriceStore.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -18,9 +19,9 @@ public class ScopeOfWorkController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<ScopeOfWorkResponseDTO>>>> GetScopes()
+    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ScopeOfWorkResponseDTO>>>> GetScopes([FromQuery] PaginationParametersDTO pagination)
     {
-        var response = await _scopesService.GetAllScopesAsync();
+        var response = await _scopesService.GetAllScopesAsync(pagination);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);

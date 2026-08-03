@@ -1,3 +1,4 @@
+using AlHudhud.DTOs.Common;
 using AlHudhud.Models;
 using BestPriceStore.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -16,9 +17,18 @@ public class UsersService : IUsersService
         _roleManager = roleManager;
     }
 
-    public async Task<ApiResponse<List<UserResponseDTO>>> GetAllUsersAsync()
+    public async Task<ApiResponse<PaginatedResultDTO<UserResponseDTO>>> GetAllUsersAsync(PaginationParametersDTO pagination)
     {
-        var usersList = await _userManager.Users.ToListAsync();
+        var query = _userManager.Users.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var usersList = await query
+            .OrderBy(u => u.Id)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .ToListAsync();
+
         var usersResponse = new List<UserResponseDTO>();
 
         foreach (var user in usersList)
@@ -40,7 +50,15 @@ public class UsersService : IUsersService
             });
         }
 
-        return new ApiResponse<List<UserResponseDTO>>(200, usersResponse);
+        var result = new PaginatedResultDTO<UserResponseDTO>
+        {
+            Items = usersResponse,
+            PageNumber = pagination.PageNumber,
+            PageSize = pagination.PageSize,
+            TotalCount = totalCount
+        };
+
+        return new ApiResponse<PaginatedResultDTO<UserResponseDTO>>(200, result);
     }
 
     public async Task<ApiResponse<UserResponseDTO>> GetUserByIdAsync(int id)

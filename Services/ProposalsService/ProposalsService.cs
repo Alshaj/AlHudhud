@@ -1,9 +1,10 @@
 using AlHudhud.Data;
-using AlHudhud.Models;
+using AlHudhud.DTOs.Common;
 using AlHudhud.DTOs.Proposals;
+using AlHudhud.Enums;
+using AlHudhud.Models;
 using BestPriceStore.DTOs;
 using Microsoft.EntityFrameworkCore;
-using AlHudhud.Enums;
 
 namespace AlHudhud.Services.ProposalsService;
 
@@ -16,12 +17,16 @@ public class ProposalsService : IProposalsService
         _context = context;
     }
 
-    public async Task<ApiResponse<List<ProposalResponseDTO>>> GetAllProposalsAsync()
+    public async Task<ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>> GetAllProposalsAsync(PaginationParametersDTO pagination)
     {
-        var proposals = await _context.Proposals
+        var query = _context.Proposals
             .Where(p => p.VersionNumber == _context.Proposals
                 .Where(sub => sub.ProposalNumber == p.ProposalNumber)
-                .Max(sub => sub.VersionNumber))
+                .Max(sub => sub.VersionNumber));
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
             .Include(p => p.ProjectScope)
                 .ThenInclude(ps => ps!.Project)
                     .ThenInclude(proj => proj!.Client)
@@ -30,6 +35,8 @@ public class ProposalsService : IProposalsService
             .Include(p => p.ProposalStatus)
             .Include(p => p.ReferedByUser)
             .OrderByDescending(p => p.CreatedAt)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
             .Select(p => new ProposalResponseDTO
             {
                 Id = p.Id,
@@ -61,7 +68,15 @@ public class ProposalsService : IProposalsService
             })
             .ToListAsync();
 
-        return new ApiResponse<List<ProposalResponseDTO>>(200, proposals);
+        var result = new PaginatedResultDTO<ProposalResponseDTO>
+        {
+            Items = items,
+            PageNumber = pagination.PageNumber,
+            PageSize = pagination.PageSize,
+            TotalCount = totalCount
+        };
+
+        return new ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>(200, result);
     }
 
     public async Task<ApiResponse<ConfirmationResponseDTO>> CreateProposalAsync(CreateProposalRequestDTO request)
