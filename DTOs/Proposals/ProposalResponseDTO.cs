@@ -14,4 +14,6 @@ public class ProposalResponseDTO
     public decimal TotalAmount { get; set; }
     public DateTime CreatedAt { get; set; }
     public string Status { get; set; } = string.Empty;
+    public int VersionNumber { get; set; }
+    public string Notes { get; set; } = string.Empty;
 }

@@ -38,7 +38,9 @@ None.
       "vat": 500.00,
       "totalAmount": 10500.00,
       "createdAt": "2026-07-30T16:17:30.123Z",
-      "status": "Pending"
+      "status": "Pending",
+      "versionNumber": 1,
+      "notes": "Urgent inspection requested."
     }
   ],
   "errors": []
@@ -297,3 +299,146 @@ If the specified proposal ID does not exist in the database:
   ]
 }
 ```
+
+---
+
+## 5. Create Proposal Version
+
+Creates a new version of an existing proposal with an updated price. The backend automatically marks all previous proposal versions with the same proposal number as `Rejected`, sets the new version status to `Pending`, increments the `versionNumber`, and calculates VAT (5%) and Total Amount.
+
+- **URL:** `/api/proposals/{id}/version`
+- **Method:** `POST`
+- **Authentication Required:** Yes (Requires a valid `access_token` cookie, role: `Admin` only)
+
+### Request Header
+Same as GET.
+
+### Request Parameters
+- **`id`** (Path Parameter, Required): The integer ID of the existing proposal to base the new version on.
+
+### Request Body (`CreateProposalVersionRequestDTO`)
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `price` | decimal | Yes | The new base price for this version. Must be greater than 0. |
+| `notes` | string | No | Optional updated notes for this version. If omitted, copies target proposal notes. |
+
+#### Example Request Body:
+```json
+{
+  "price": 12500.00,
+  "notes": "Revised price after secondary scope negotiation."
+}
+```
+
+### Response Body (`ApiResponse<ConfirmationResponseDTO>`)
+
+#### Success (`201 Created`)
+```json
+{
+  "statusCode": 201,
+  "success": true,
+  "data": {
+    "message": "Proposal AH-260001 version 2 created successfully."
+  },
+  "errors": []
+}
+```
+
+#### Bad Request (`400 Bad Request`)
+```json
+{
+  "statusCode": 400,
+  "success": false,
+  "data": null,
+  "errors": [
+    "Price must be greater than zero."
+  ]
+}
+```
+
+#### Not Found (`404 Not Found`)
+```json
+{
+  "statusCode": 404,
+  "success": false,
+  "data": null,
+  "errors": [
+    "Proposal not found."
+  ]
+}
+```
+
+---
+
+## 6. Get Proposal History
+
+Retrieves all historical versions of a proposal sharing the same `proposalNumber`, ordered by version number descending.
+
+- **URL:** `/api/proposals/{id}/history`
+- **Method:** `GET`
+- **Authentication Required:** Yes (Requires a valid `access_token` cookie, roles: `Admin` or `Viewer`)
+
+### Request Header
+Same as GET.
+
+### Request Parameters
+- **`id`** (Path Parameter, Required): The integer ID of any proposal version belonging to the target proposal number.
+
+### Response Body (`ApiResponse<List<ProposalResponseDTO>>`)
+
+#### Success (`200 OK`)
+```json
+{
+  "statusCode": 200,
+  "success": true,
+  "data": [
+    {
+      "id": 5,
+      "proposalNumber": "AH-260001",
+      "clientName": "Al Hudhud Consultancy LLC",
+      "projectName": "Warehouse Inspection",
+      "scopeOfWork": "Fire Alarm Inspection",
+      "location": "Dubai Industrial City",
+      "referedBy": "admin@example.com",
+      "price": 12500.00,
+      "vat": 625.00,
+      "totalAmount": 13125.00,
+      "createdAt": "2026-08-03T17:50:00.000Z",
+      "status": "Pending",
+      "versionNumber": 2,
+      "notes": "Revised price after secondary scope negotiation."
+    },
+    {
+      "id": 1,
+      "proposalNumber": "AH-260001",
+      "clientName": "Al Hudhud Consultancy LLC",
+      "projectName": "Warehouse Inspection",
+      "scopeOfWork": "Fire Alarm Inspection",
+      "location": "Dubai Industrial City",
+      "referedBy": "admin@example.com",
+      "price": 10000.00,
+      "vat": 500.00,
+      "totalAmount": 10500.00,
+      "createdAt": "2026-07-30T16:17:30.123Z",
+      "status": "Rejected",
+      "versionNumber": 1,
+      "notes": "Original proposal quote."
+    }
+  ],
+  "errors": []
+}
+```
+
+#### Not Found (`404 Not Found`)
+```json
+{
+  "statusCode": 404,
+  "success": false,
+  "data": null,
+  "errors": [
+    "Proposal not found."
+  ]
+}
+```
+
