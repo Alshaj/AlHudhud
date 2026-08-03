@@ -19,9 +19,12 @@ public class ScopeOfWorkController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ScopeOfWorkResponseDTO>>>> GetScopes([FromQuery] PaginationParametersDTO pagination)
+    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ScopeOfWorkResponseDTO>>>> GetScopes(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? search = null)
     {
-        var response = await _scopesService.GetAllScopesAsync(pagination);
+        var response = await _scopesService.GetAllScopesAsync(page, pageSize, search);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);

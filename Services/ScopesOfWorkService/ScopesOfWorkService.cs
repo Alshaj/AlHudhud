@@ -15,16 +15,25 @@ public class ScopesOfWorkService : IScopesOfWorkService
         _context = context;
     }
 
-    public async Task<ApiResponse<PaginatedResultDTO<ScopeOfWorkResponseDTO>>> GetAllScopesAsync(PaginationParametersDTO pagination)
+    public async Task<ApiResponse<PaginatedResultDTO<ScopeOfWorkResponseDTO>>> GetAllScopesAsync(int page = 1, int pageSize = 10, string? search = null)
     {
+        page = page < 1 ? 1 : page;
+        pageSize = pageSize < 1 ? 10 : (pageSize > 100 ? 100 : pageSize);
+
         var query = _context.ScopesOfWork.Where(s => !s.IsDeleted);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var searchLower = search.Trim().ToLower();
+            query = query.Where(s => s.Name != null && s.Name.ToLower().Contains(searchLower));
+        }
 
         var totalCount = await query.CountAsync();
 
         var items = await query
             .OrderBy(s => s.Id)
-            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
-            .Take(pagination.PageSize)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(s => new ScopeOfWorkResponseDTO
             {
                 Id = s.Id,
@@ -36,8 +45,8 @@ public class ScopesOfWorkService : IScopesOfWorkService
         var result = new PaginatedResultDTO<ScopeOfWorkResponseDTO>
         {
             Items = items,
-            PageNumber = pagination.PageNumber,
-            PageSize = pagination.PageSize,
+            Page = page,
+            PageSize = pageSize,
             TotalCount = totalCount
         };
 

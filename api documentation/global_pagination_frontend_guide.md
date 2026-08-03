@@ -1,31 +1,28 @@
-# Global Pagination Integration Guide (Frontend Developer Specification)
+# Global Pagination & Search Integration Guide (Frontend Developer Specification)
 
-This document details the standardized pagination query parameters, response structures, TypeScript interfaces, and list endpoints updated for the Al Hudhud API. Use this documentation to instruct frontend developers or AI models on how to integrate paginated tables and controls.
+This document details the explicit query parameters (`page`, `pageSize`, `search`), response structures, TypeScript interfaces, and list endpoints updated for the Al Hudhud API.
 
 ---
 
-## 1. Overview & Default Settings
+## 1. Query Parameters Specification
 
-- **Default Page Number:** `1` (1-indexed).
-- **Default Page Size:** `20` items per page.
-- **Max Page Size:** `100` items per page.
-- **Behavior:** Query parameters are optional. Omitting `pageNumber` or `pageSize` defaults to `pageNumber=1` and `pageSize=20`.
+All list endpoints accept the following optional query parameters:
+
+| Parameter | Type | Default | Description | Example |
+|---|---|---|---|---|
+| `page` | int | `1` | The 1-indexed page number to retrieve. | `?page=1` |
+| `pageSize` | int | `10` | Number of items per page (Min: 1, Max: 100). | `?pageSize=10` |
+| `search` | string | `null` | Optional text search filter across names, emails, numbers. | `?search=Al+Hudhud` |
 
 ---
 
 ## 2. TypeScript Interfaces
 
 ```typescript
-// Query Parameters
-export interface PaginationParameters {
-  pageNumber?: number; // Default: 1
-  pageSize?: number;   // Default: 20, Max: 100
-}
-
 // Generic Paginated Result Container
 export interface PaginatedResult<T> {
   items: T[];
-  pageNumber: number;
+  page: number;
   pageSize: number;
   totalCount: number;
   totalPages: number;
@@ -46,27 +43,22 @@ export interface ApiResponse<T> {
 
 ## 3. Endpoints Summary
 
-### Paginated "Get All" List Endpoints (`ApiResponse<PaginatedResult<T>>`):
-1. **Clients:** `GET /api/clients?pageNumber=1&pageSize=20`
-2. **Proposals:** `GET /api/proposals?pageNumber=1&pageSize=20` (Returns latest proposal versions only)
-3. **Scopes of Work:** `GET /api/ScopeOfWork?pageNumber=1&pageSize=20`
-4. **Users:** `GET /api/Users?pageNumber=1&pageSize=20`
-
-### Non-Paginated Endpoints (Unchanged):
-- **Roles:** `GET /api/Roles` (Returns un-paginated array `ApiResponse<RoleResponseDTO[]>`)
-- **Single Item Details:** `GET /api/clients/{id}`, `GET /api/ScopeOfWork/{id}`, `GET /api/Users/{id}`
-- **Proposal History:** `GET /api/proposals/{id}/history` (Returns array of all version history for a proposal number)
+### Paginated & Searchable List Endpoints (`ApiResponse<PaginatedResult<T>>`):
+1. **Clients:** `GET /api/clients?page=1&pageSize=10&search=`
+2. **Proposals:** `GET /api/proposals?page=1&pageSize=10&search=` (Returns latest proposal versions only)
+3. **Scopes of Work:** `GET /api/ScopeOfWork?page=1&pageSize=10&search=`
+4. **Users:** `GET /api/Users?page=1&pageSize=10&search=`
 
 ---
 
-## 4. Paginated Response Payloads & Examples
+## 4. Response Payloads & Examples
 
 ### 4.1. Clients List (`GET /api/clients`)
 
-#### Example Request:
-`GET /api/clients?pageNumber=1&pageSize=20`
+#### Request:
+`GET /api/clients?page=1&pageSize=10&search=Hudhud`
 
-#### Example Response (`200 OK`):
+#### Response (`200 OK`):
 ```json
 {
   "statusCode": 200,
@@ -81,8 +73,8 @@ export interface ApiResponse<T> {
         "companyType": "Corporate LLC"
       }
     ],
-    "pageNumber": 1,
-    "pageSize": 20,
+    "page": 1,
+    "pageSize": 10,
     "totalCount": 1,
     "totalPages": 1,
     "hasPreviousPage": false,
@@ -96,10 +88,10 @@ export interface ApiResponse<T> {
 
 ### 4.2. Proposals List (`GET /api/proposals`)
 
-#### Example Request:
-`GET /api/proposals?pageNumber=1&pageSize=20`
+#### Request:
+`GET /api/proposals?page=1&pageSize=10`
 
-#### Example Response (`200 OK`):
+#### Response (`200 OK`):
 ```json
 {
   "statusCode": 200,
@@ -117,14 +109,14 @@ export interface ApiResponse<T> {
         "price": 12500.00,
         "vat": 625.00,
         "totalAmount": 13125.00,
-        "createdAt": "2026-08-03T17:50:00.000Z",
+        "createdAt": "2026-08-03T17:50:00",
         "status": "Pending",
         "versionNumber": 2,
         "notes": "Revised quote after scope meeting."
       }
     ],
-    "pageNumber": 1,
-    "pageSize": 20,
+    "page": 1,
+    "pageSize": 10,
     "totalCount": 1,
     "totalPages": 1,
     "hasPreviousPage": false,
@@ -136,99 +128,20 @@ export interface ApiResponse<T> {
 
 ---
 
-### 4.3. Scopes of Work List (`GET /api/ScopeOfWork`)
+## 5. Frontend Integration Example (Axios)
 
-#### Example Request:
-`GET /api/ScopeOfWork?pageNumber=1&pageSize=20`
-
-#### Example Response (`200 OK`):
-```json
-{
-  "statusCode": 200,
-  "success": true,
-  "data": {
-    "items": [
-      {
-        "id": 1,
-        "name": "Fire Safety Inspection",
-        "isNeedInspection": true
-      }
-    ],
-    "pageNumber": 1,
-    "pageSize": 20,
-    "totalCount": 1,
-    "totalPages": 1,
-    "hasPreviousPage": false,
-    "hasNextPage": false
-  },
-  "errors": []
-}
-```
-
----
-
-### 4.4. Users List (`GET /api/Users`)
-
-#### Example Request:
-`GET /api/Users?pageNumber=1&pageSize=20`
-
-#### Example Response (`200 OK`):
-```json
-{
-  "statusCode": 200,
-  "success": true,
-  "data": {
-    "items": [
-      {
-        "id": 1,
-        "userName": "admin@example.com",
-        "email": "admin@example.com",
-        "phoneNumber": "+971501234567",
-        "isActive": true,
-        "role": "Admin",
-        "roleId": 1
-      }
-    ],
-    "pageNumber": 1,
-    "pageSize": 20,
-    "totalCount": 1,
-    "totalPages": 1,
-    "hasPreviousPage": false,
-    "hasNextPage": false
-  },
-  "errors": []
-}
-```
-
----
-
-## 5. Frontend UI Integration Workflow
-
-### 5.1. Managing State
-For table components rendering paginated data, maintain the following state:
-- `pageNumber`: current active page (default `1`).
-- `pageSize`: items per page dropdown selection (default `20`).
-
-### 5.2. Fetching Data
-When `pageNumber` or `pageSize` changes:
 ```typescript
-const fetchClients = async (page = 1, size = 20) => {
-  const response = await axios.get<ApiResponse<PaginatedResult<Client>>>(
-    `/api/clients?pageNumber=${page}&pageSize=${size}`,
-    { withCredentials: true }
+const fetchProposals = async (page = 1, pageSize = 10, search = '') => {
+  const response = await axios.get<ApiResponse<PaginatedResult<ProposalItem>>>(
+    '/api/proposals',
+    {
+      params: { page, pageSize, search: search || undefined },
+      withCredentials: true,
+      headers: {
+        'X-Timezone-Offset': -new Date().getTimezoneOffset() / 60 // Dynamically passes offset (e.g. 3)
+      }
+    }
   );
-  
-  if (response.data.success) {
-    setClients(response.data.data.items);
-    setTotalPages(response.data.data.totalPages);
-    setTotalCount(response.data.data.totalCount);
-    setHasNextPage(response.data.data.hasNextPage);
-    setHasPreviousPage(response.data.data.hasPreviousPage);
-  }
+  return response.data;
 };
 ```
-
-### 5.3. Rendering Pagination Footer
-- **Previous Button**: Disable when `hasPreviousPage === false` or `pageNumber === 1`.
-- **Next Button**: Disable when `hasNextPage === false` or `pageNumber >= totalPages`.
-- **Page Indicator**: Show `"Page {pageNumber} of {totalPages}"` or `"Showing {items.length} of {totalCount} entries"`.

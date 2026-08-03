@@ -16,16 +16,27 @@ public class ClientsService : IClientsService
         _context = context;
     }
 
-    public async Task<ApiResponse<PaginatedResultDTO<ClientResponseDTO>>> GetAllClientsAsync(PaginationParametersDTO pagination)
+    public async Task<ApiResponse<PaginatedResultDTO<ClientResponseDTO>>> GetAllClientsAsync(int page = 1, int pageSize = 10, string? search = null)
     {
+        page = page < 1 ? 1 : page;
+        pageSize = pageSize < 1 ? 10 : (pageSize > 100 ? 100 : pageSize);
+
         var query = _context.Clients.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var searchLower = search.Trim().ToLower();
+            query = query.Where(c => (c.ClientName != null && c.ClientName.ToLower().Contains(searchLower)) ||
+                                     (c.Email != null && c.Email.ToLower().Contains(searchLower)) ||
+                                     (c.TaxNumber != null && c.TaxNumber.ToLower().Contains(searchLower)));
+        }
 
         var totalCount = await query.CountAsync();
 
         var items = await query
             .OrderBy(c => c.Id)
-            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
-            .Take(pagination.PageSize)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(c => new ClientResponseDTO
             {
                 Id = c.Id,
@@ -39,8 +50,8 @@ public class ClientsService : IClientsService
         var result = new PaginatedResultDTO<ClientResponseDTO>
         {
             Items = items,
-            PageNumber = pagination.PageNumber,
-            PageSize = pagination.PageSize,
+            Page = page,
+            PageSize = pageSize,
             TotalCount = totalCount
         };
 

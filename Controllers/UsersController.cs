@@ -19,9 +19,12 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<UserResponseDTO>>>> GetUsers([FromQuery] PaginationParametersDTO pagination)
+    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<UserResponseDTO>>>> GetUsers(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? search = null)
     {
-        var response = await _usersService.GetAllUsersAsync(pagination);
+        var response = await _usersService.GetAllUsersAsync(page, pageSize, search);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);
