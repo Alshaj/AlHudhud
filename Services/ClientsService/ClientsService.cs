@@ -1,4 +1,5 @@
 using AlHudhud.Data;
+using AlHudhud.DTOs.Clients;
 using AlHudhud.Models;
 using BestPriceStore.DTOs;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +51,7 @@ public class ClientsService : IClientsService
         return new ApiResponse<ClientResponseDTO>(200, clientDTO);
     }
 
-    public async Task<ApiResponse<ConfirmationResponseDTO>> CreateClientAsync(CreateClientRequestDTO createClientDTO)
+    public async Task<ApiResponse<CreateClientResponseDTO>> CreateClientAsync(CreateClientRequestDTO createClientDTO)
     {
         var client = new Client
         {
@@ -63,17 +64,9 @@ public class ClientsService : IClientsService
         _context.Clients.Add(client);
         await _context.SaveChangesAsync();
 
-        var clientResponse = new ClientResponseDTO
+        return new ApiResponse<CreateClientResponseDTO>(201, new CreateClientResponseDTO
         {
             Id = client.Id,
-            ClientName = client.ClientName,
-            TaxNumber = client.TaxNumber,
-            Email = client.Email,
-            CompanyType = client.CompanyType
-        };
-
-        return new ApiResponse<ConfirmationResponseDTO>(201, new ConfirmationResponseDTO
-        {
             Message = "Client created successfully."
         });
     }

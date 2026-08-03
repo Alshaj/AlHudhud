@@ -1,3 +1,4 @@
+using AlHudhud.DTOs.Clients;
 using AlHudhud.Services.ClientsService;
 using BestPriceStore.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -41,11 +42,11 @@ public class ClientsController : ControllerBase
 
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> CreateClient([FromBody] CreateClientRequestDTO createClientDTO)
+    public async Task<ActionResult<ApiResponse<CreateClientResponseDTO>>> CreateClient([FromBody] CreateClientRequestDTO createClientDTO)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid client data."));
+            return BadRequest(new ApiResponse<CreateClientResponseDTO>(400, "Invalid client data."));
         }
         var response = await _clientsService.CreateClientAsync(createClientDTO);
         if (response.StatusCode != 201)

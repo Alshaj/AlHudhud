@@ -33,7 +33,7 @@ Only `clientName` is required. The fields `taxNumber`, `email`, and `companyType
 }
 ```
 
-### Response Body (`ApiResponse<ClientResponseDTO>`)
+### Response Body (`ApiResponse<CreateClientResponseDTO>`)
 
 #### Success (`201 Created`)
 ```json
@@ -42,10 +42,7 @@ Only `clientName` is required. The fields `taxNumber`, `email`, and `companyType
   "success": true,
   "data": {
     "id": 3,
-    "clientName": "Gulf Enterprises LLC",
-    "taxNumber": "100554433221109",
-    "email": "contact@gulfent.com",
-    "companyType": "Corporate"
+    "message": "Client created successfully."
   },
   "errors": []
 }
