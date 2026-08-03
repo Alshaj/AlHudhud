@@ -61,6 +61,7 @@ The `GET /api/proposals` endpoint filters and returns **only the latest version*
 - **Method:** `GET`
 - **Authentication Required:** Yes (HttpOnly Cookie `access_token`, `withCredentials: true`)
 - **Roles Allowed:** `Admin`, `Viewer`
+- **Headers (Optional):** `X-Timezone-Offset: 3` (Number of offset hours, e.g. `3` for Yemen GMT+3. Defaults to `3` if omitted). Backend adjusts `createdAt` by adding this offset.
 
 ### Query Parameters (Optional):
 - `pageNumber` (number, default: `1`): The 1-indexed page number.

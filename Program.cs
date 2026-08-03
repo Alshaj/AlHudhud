@@ -7,6 +7,7 @@ using AlHudhud.Services.ScopesOfWorkService;
 using AlHudhud.Services.UsersService;
 using AlHudhud.Services.RolesService;
 using AlHudhud.Services.ProposalsService;
+using AlHudhud.Services.TimezoneService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,9 @@ builder.Services.AddScoped<IRolesService, RolesService>();
 
 // Proposals Service
 builder.Services.AddScoped<IProposalsService, ProposalsService>();
+
+// Timezone Service
+builder.Services.AddScoped<ITimezoneService, TimezoneService>();
 
 
 

@@ -12,8 +12,9 @@ Retrieves the list of all proposals in the system.
 - **Method:** `GET`
 - **Authentication Required:** Yes (Requires a valid `access_token` cookie, roles: `Admin` or `Viewer`)
 
-### Request Header
-Since the API uses HttpOnly cookies, the browser will automatically include the `access_token` cookie in the request if credentials are enabled (`withCredentials = true` in Axios or `credentials: 'include'` in Fetch).
+### Request Headers
+- **`Cookie`**: Authentication `access_token` cookie.
+- **`X-Timezone-Offset`** *(Optional, number)*: Timezone offset in hours (e.g., `3` for Yemen GMT+3). If omitted, defaults to `3` (Yemen GMT+3). Backend converts UTC timestamps (`CreatedAt`) to this offset.
 
 ### Query Parameters (Optional)
 

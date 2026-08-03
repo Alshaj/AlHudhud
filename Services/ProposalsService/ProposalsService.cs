@@ -3,6 +3,7 @@ using AlHudhud.DTOs.Common;
 using AlHudhud.DTOs.Proposals;
 using AlHudhud.Enums;
 using AlHudhud.Models;
+using AlHudhud.Services.TimezoneService;
 using BestPriceStore.DTOs;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +12,12 @@ namespace AlHudhud.Services.ProposalsService;
 public class ProposalsService : IProposalsService
 {
     private readonly ApplicationDbContext _context;
+    private readonly ITimezoneService _timezoneService;
 
-    public ProposalsService(ApplicationDbContext context)
+    public ProposalsService(ApplicationDbContext context, ITimezoneService timezoneService)
     {
         _context = context;
+        _timezoneService = timezoneService;
     }
 
     public async Task<ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>> GetAllProposalsAsync(PaginationParametersDTO pagination)
@@ -67,6 +70,11 @@ public class ProposalsService : IProposalsService
                 Notes = p.Notes
             })
             .ToListAsync();
+
+        foreach (var item in items)
+        {
+            item.CreatedAt = _timezoneService.ConvertToLocalTime(item.CreatedAt);
+        }
 
         var result = new PaginatedResultDTO<ProposalResponseDTO>
         {
@@ -440,6 +448,11 @@ public class ProposalsService : IProposalsService
                 Notes = p.Notes
             })
             .ToListAsync();
+
+        foreach (var item in history)
+        {
+            item.CreatedAt = _timezoneService.ConvertToLocalTime(item.CreatedAt);
+        }
 
         return new ApiResponse<List<ProposalResponseDTO>>(200, history);
     }
