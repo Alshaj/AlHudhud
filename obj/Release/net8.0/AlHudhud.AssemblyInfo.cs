@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AlHudhud")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f4b5a951288cc634abf98526d04c98267edc0fe")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ab0157d2e865b15fb56b5193b7dfa01ea1b504f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("AlHudhud")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AlHudhud")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

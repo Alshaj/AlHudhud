@@ -1,4 +1,5 @@
 using AlHudhud.Data;
+using AlHudhud.DTOs.Common;
 using AlHudhud.Models;
 using BestPriceStore.DTOs;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,16 @@ public class ScopesOfWorkService : IScopesOfWorkService
         _context = context;
     }
 
-    public async Task<ApiResponse<List<ScopeOfWorkResponseDTO>>> GetAllScopesAsync()
+    public async Task<ApiResponse<PaginatedResultDTO<ScopeOfWorkResponseDTO>>> GetAllScopesAsync(PaginationParametersDTO pagination)
     {
-        var scopes = await _context.ScopesOfWork
-            .Where(s => !s.IsDeleted)
+        var query = _context.ScopesOfWork.Where(s => !s.IsDeleted);
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(s => s.Id)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
             .Select(s => new ScopeOfWorkResponseDTO
             {
                 Id = s.Id,
@@ -26,12 +33,15 @@ public class ScopesOfWorkService : IScopesOfWorkService
             })
             .ToListAsync();
 
-        if(scopes == null )
+        var result = new PaginatedResultDTO<ScopeOfWorkResponseDTO>
         {
-            return new ApiResponse<List<ScopeOfWorkResponseDTO>>(404, "No scopes of work found.");
-        }
+            Items = items,
+            PageNumber = pagination.PageNumber,
+            PageSize = pagination.PageSize,
+            TotalCount = totalCount
+        };
 
-        return new ApiResponse<List<ScopeOfWorkResponseDTO>>(200, scopes);
+        return new ApiResponse<PaginatedResultDTO<ScopeOfWorkResponseDTO>>(200, result);
     }
 
     public async Task<ApiResponse<ScopeOfWorkResponseDTO>> GetScopeByIdAsync(int id)

@@ -1,5 +1,6 @@
 using AlHudhud.Services.ProposalsService;
 using AlHudhud.DTOs.Proposals;
+using AlHudhud.DTOs.Common;
 using BestPriceStore.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace AlHudhud.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-//[Authorize(Roles = "Admin,Viewer")]
+[Authorize(Roles = "Admin,Viewer")]
 public class ProposalsController : ControllerBase
 {
     private readonly IProposalsService _proposalsService;
@@ -19,9 +20,9 @@ public class ProposalsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ApiResponse<List<ProposalResponseDTO>>>> GetAllProposals()
+    public async Task<ActionResult<ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>>> GetAllProposals([FromQuery] PaginationParametersDTO pagination)
     {
-        var response = await _proposalsService.GetAllProposalsAsync();
+        var response = await _proposalsService.GetAllProposalsAsync(pagination);
         if (response.StatusCode != 200)
         {
             return StatusCode(response.StatusCode, response);

@@ -1,3 +1,4 @@
+using AlHudhud.DTOs.Common;
 using AlHudhud.DTOs.Proposals;
 using BestPriceStore.DTOs;
 
@@ -5,7 +6,7 @@ namespace AlHudhud.Services.ProposalsService;
 
 public interface IProposalsService
 {
-    Task<ApiResponse<List<ProposalResponseDTO>>> GetAllProposalsAsync();
+    Task<ApiResponse<PaginatedResultDTO<ProposalResponseDTO>>> GetAllProposalsAsync(PaginationParametersDTO pagination);
     Task<ApiResponse<ConfirmationResponseDTO>> CreateProposalAsync(CreateProposalRequestDTO request);
     Task<ApiResponse<ConfirmationResponseDTO>> UpdateProposalAsync(int id, UpdateProposalRequestDTO request);
     Task<ApiResponse<ConfirmationResponseDTO>> ChangeProposalStatusAsync(int id, ChangeProposalStatusDTO request);

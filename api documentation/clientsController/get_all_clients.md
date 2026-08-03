@@ -14,32 +14,47 @@ Retrieves the list of all clients in the system.
 ### Request Header
 Since the API uses HttpOnly cookies, the browser will automatically include the `access_token` cookie in the request if credentials are enabled (`withCredentials = true` in Axios or `credentials: 'include'` in Fetch).
 
+### Query Parameters (Optional)
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pageNumber` | int | `1` | The 1-indexed page number to retrieve. |
+| `pageSize` | int | `20` | Number of items per page (Min: 1, Max: 100). |
+
 ### Request Body
 None.
 
-### Response Body (`ApiResponse<IEnumerable<ClientResponseDTO>>`)
+### Response Body (`ApiResponse<PaginatedResultDTO<ClientResponseDTO>>`)
 
 #### Success (`200 OK`)
 ```json
 {
   "statusCode": 200,
   "success": true,
-  "data": [
-    {
-      "id": 1,
-      "clientName": "Al Hudhud Consultancy LLC",
-      "taxNumber": "100234567800003",
-      "email": "info@alhudhud.ae",
-      "companyType": "Corporate"
-    },
-    {
-      "id": 2,
-      "clientName": "John Doe Enterprises",
-      "taxNumber": null,
-      "email": "johndoe@example.com",
-      "companyType": "Individual"
-    }
-  ],
+  "data": {
+    "items": [
+      {
+        "id": 1,
+        "clientName": "Al Hudhud Consultancy LLC",
+        "taxNumber": "100234567800003",
+        "email": "info@alhudhud.ae",
+        "companyType": "Corporate"
+      },
+      {
+        "id": 2,
+        "clientName": "John Doe Enterprises",
+        "taxNumber": null,
+        "email": "johndoe@example.com",
+        "companyType": "Individual"
+      }
+    ],
+    "pageNumber": 1,
+    "pageSize": 20,
+    "totalCount": 2,
+    "totalPages": 1,
+    "hasPreviousPage": false,
+    "hasNextPage": false
+  },
   "errors": []
 }
 ```
