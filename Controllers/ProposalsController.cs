@@ -79,4 +79,33 @@ public class ProposalsController : ControllerBase
         }
         return Ok(response);
     }
+
+    [HttpPost("{id}/version")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<ApiResponse<ConfirmationResponseDTO>>> CreateProposalVersion(int id, [FromBody] CreateProposalVersionRequestDTO versionDTO)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new ApiResponse<ConfirmationResponseDTO>(400, "Invalid version data."));
+        }
+
+        var response = await _proposalsService.CreateProposalVersionAsync(id, versionDTO);
+        if (response.StatusCode != 201)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
+    }
+
+    [HttpGet("{id}/history")]
+    [Authorize(Roles = "Admin,Viewer")]
+    public async Task<ActionResult<ApiResponse<List<ProposalResponseDTO>>>> GetProposalHistory(int id)
+    {
+        var response = await _proposalsService.GetProposalHistoryAsync(id);
+        if (response.StatusCode != 200)
+        {
+            return StatusCode(response.StatusCode, response);
+        }
+        return Ok(response);
+    }
 }

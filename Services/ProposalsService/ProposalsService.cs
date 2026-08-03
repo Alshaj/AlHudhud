@@ -19,6 +19,9 @@ public class ProposalsService : IProposalsService
     public async Task<ApiResponse<List<ProposalResponseDTO>>> GetAllProposalsAsync()
     {
         var proposals = await _context.Proposals
+            .Where(p => p.VersionNumber == _context.Proposals
+                .Where(sub => sub.ProposalNumber == p.ProposalNumber)
+                .Max(sub => sub.VersionNumber))
             .Include(p => p.ProjectScope)
                 .ThenInclude(ps => ps!.Project)
                     .ThenInclude(proj => proj!.Client)
@@ -52,7 +55,9 @@ public class ProposalsService : IProposalsService
                 CreatedAt = p.CreatedAt,
                 Status = p.ProposalStatus != null
                     ? p.ProposalStatus.Name
-                    : "Pending"
+                    : "Pending",
+                VersionNumber = p.VersionNumber,
+                Notes = p.Notes
             })
             .ToListAsync();
 
@@ -309,5 +314,118 @@ public class ProposalsService : IProposalsService
         {
             Message = $"Proposal status updated to {statusName} successfully."
         });
+    }
+
+    public async Task<ApiResponse<ConfirmationResponseDTO>> CreateProposalVersionAsync(int id, CreateProposalVersionRequestDTO request)
+    {
+        var targetProposal = await _context.Proposals.FindAsync(id);
+        if (targetProposal == null)
+        {
+            return new ApiResponse<ConfirmationResponseDTO>(404, "Proposal not found.");
+        }
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            // 1. Get all previous proposals sharing the same ProposalNumber
+            var previousProposals = await _context.Proposals
+                .Where(p => p.ProposalNumber == targetProposal.ProposalNumber)
+                .ToListAsync();
+
+            // Find current max version number
+            int maxVersion = previousProposals.Max(p => p.VersionNumber);
+
+            // 2. Update previous versions' statuses to Rejected (3)
+            foreach (var prev in previousProposals)
+            {
+                prev.StatusId = (int)ProposalStatusEnum.Rejected;
+            }
+
+            // 3. Calculate VAT & Total Amount
+            var vat = request.Price * 0.05m;
+            var totalAmount = request.Price + vat;
+            int newVersion = maxVersion + 1;
+
+            // 4. Create new version record
+            var newProposalVersion = new Proposal
+            {
+                ProposalNumber = targetProposal.ProposalNumber,
+                ProjectScopeId = targetProposal.ProjectScopeId,
+                StatusId = (int)ProposalStatusEnum.Pending,
+                ReferedBy = targetProposal.ReferedBy,
+                Price = request.Price,
+                Vat = vat,
+                TotalAmount = totalAmount,
+                VersionNumber = newVersion,
+                Notes = !string.IsNullOrWhiteSpace(request.Notes) ? request.Notes : targetProposal.Notes,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Proposals.Add(newProposalVersion);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return new ApiResponse<ConfirmationResponseDTO>(201, new ConfirmationResponseDTO
+            {
+                Message = $"Proposal {targetProposal.ProposalNumber} version {newVersion} created successfully."
+            });
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return new ApiResponse<ConfirmationResponseDTO>(500, $"An error occurred: {ex.Message}");
+        }
+    }
+
+    public async Task<ApiResponse<List<ProposalResponseDTO>>> GetProposalHistoryAsync(int id)
+    {
+        var targetProposal = await _context.Proposals.FindAsync(id);
+        if (targetProposal == null)
+        {
+            return new ApiResponse<List<ProposalResponseDTO>>(404, "Proposal not found.");
+        }
+
+        var history = await _context.Proposals
+            .Where(p => p.ProposalNumber == targetProposal.ProposalNumber)
+            .Include(p => p.ProjectScope)
+                .ThenInclude(ps => ps!.Project)
+                    .ThenInclude(proj => proj!.Client)
+            .Include(p => p.ProjectScope)
+                .ThenInclude(ps => ps!.ScopeOfWork)
+            .Include(p => p.ProposalStatus)
+            .Include(p => p.ReferedByUser)
+            .OrderByDescending(p => p.VersionNumber)
+            .Select(p => new ProposalResponseDTO
+            {
+                Id = p.Id,
+                ProposalNumber = p.ProposalNumber,
+                ClientName = p.ProjectScope != null && p.ProjectScope.Project != null && p.ProjectScope.Project.Client != null
+                    ? p.ProjectScope.Project.Client.ClientName
+                    : string.Empty,
+                ProjectName = p.ProjectScope != null && p.ProjectScope.Project != null
+                    ? p.ProjectScope.Project.Name
+                    : string.Empty,
+                ScopeOfWork = p.ProjectScope != null && p.ProjectScope.ScopeOfWork != null
+                    ? p.ProjectScope.ScopeOfWork.Name
+                    : string.Empty,
+                Location = p.ProjectScope != null
+                    ? p.ProjectScope.Location
+                    : string.Empty,
+                ReferedBy = p.ReferedByUser != null
+                    ? p.ReferedByUser.UserName ?? string.Empty
+                    : string.Empty,
+                Price = p.Price,
+                Vat = p.Vat,
+                TotalAmount = p.TotalAmount,
+                CreatedAt = p.CreatedAt,
+                Status = p.ProposalStatus != null
+                    ? p.ProposalStatus.Name
+                    : "Pending",
+                VersionNumber = p.VersionNumber,
+                Notes = p.Notes
+            })
+            .ToListAsync();
+
+        return new ApiResponse<List<ProposalResponseDTO>>(200, history);
     }
 }
